@@ -9,8 +9,8 @@ interface DashboardProps {
 }
 
 export default function Auth({ supabase }: DashboardProps) {
-	const [email, setEmail] = useState("resujeff27@gmail.com");
-	const [password, setPassword] = useState("asdasdasd");
+	const [email, setEmail] = useState("");
+	const [password, setPassword] = useState("");
 	const [fullname, setFullname] = useState(""); // Add fullname state
 	const [isRegistering, setIsRegistering] = useState(false);
 
