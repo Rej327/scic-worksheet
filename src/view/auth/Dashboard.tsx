@@ -80,7 +80,7 @@ export default function Dashboard({ supabase }: DashboardProps) {
 				Welcome {user?.user_metadata?.full_name}
 			</h1>
 			{["1", "2", "3"].map((page, idx) => (
-				<Link href={`/secret/secret-page-${page}`} key={idx}>
+				<Link href={`/secret-page-${page}`} key={idx}>
 					<button className="bg-green-500 text-white p-2 w-full mb-2">
 						Secret Page {page}
 					</button>
