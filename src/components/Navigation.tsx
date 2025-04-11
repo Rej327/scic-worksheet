@@ -2,7 +2,7 @@
 
 import React, { useState } from "react";
 import Link from "next/link";
-import { usePathname } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import { supabase } from "@/helper/connection";
 import {
 	FaHome,
@@ -21,11 +21,13 @@ export default function Navigation({
 }) {
 	const [loading, setLoading] = useState(false);
 	const pathname = usePathname(); // ⬅️ Get current path
+	const route = useRouter();
 
 	const handleLogout = async () => {
 		try {
 			setLoading(true);
 			await supabase.auth.signOut();
+			route.push("/");
 		} catch {
 			console.log("Error on logout");
 		} finally {

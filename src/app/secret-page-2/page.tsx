@@ -90,23 +90,26 @@ export default function SecretPage2() {
 
 	const handleDeleteMessage = async (id: string) => {
 		if (confirm("Are you sure you want to delete this message?")) {
-		  const { error } = await supabase.from("secret_messages").delete().eq("id", id);
-		  if (error) {
-			console.error("Delete error:", error.message);
-		  } else {
-			alert("Message deleted");
-			location.reload(); // consider using re-fetch instead
-		  }
+			const { error } = await supabase
+				.from("secret_messages")
+				.delete()
+				.eq("id", id);
+			if (error) {
+				console.error("Delete error:", error.message);
+			} else {
+				alert("Message deleted");
+				location.reload(); // consider using re-fetch instead
+			}
 		}
-	  };
+	};
 
-	  
-	if (loading) return <Loading loading={loading} />
-
-	  
+	if (loading) return <Loading loading={loading} />;
 
 	return (
-		<div className="max-w-xl mx-auto p-6 space-y-6">
+		<div className="w-auto mx-auto p-6 space-y-6">
+			<h1 className="text-2xl font-bold mb-4">
+				👋 Hello, {user?.user_metadata?.full_name}
+			</h1>
 			{/* User Messages */}
 			<Messages messages={messages} />
 			<OverwriteMessages
@@ -120,7 +123,6 @@ export default function SecretPage2() {
 				handleEditMessage={handleEditMessage}
 				handleDeleteMessage={handleDeleteMessage}
 			/>
-
 		</div>
 	);
 }

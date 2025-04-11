@@ -4,6 +4,7 @@ import Loading from "@/helper/Loading";
 import { SupabaseClient, User } from "@supabase/supabase-js";
 import Link from "next/link";
 import React, { useEffect, useState } from "react";
+import { FaEdit, FaEnvelope, FaUsers } from "react-icons/fa";
 
 interface DashboardProps {
 	supabase: SupabaseClient;
@@ -75,31 +76,24 @@ export default function Dashboard({ supabase }: DashboardProps) {
 
 	if (loading) return <Loading loading={loading} />;
 
+	const secretPages = [
+		{ id: "1", title: "Messages", icon: <FaEnvelope size={50} /> },
+		{ id: "2", title: "Overwrite Messages", icon: <FaEdit size={50} /> },
+		{ id: "3", title: "Socials", icon: <FaUsers size={50} /> },
+	];
+
 	return (
-		<div className="p-6 max-w-md mx-auto">
-			<h1 className="text-xl mb-4">
-				Welcome {user?.user_metadata?.full_name}
-			</h1>
-			{["1", "2", "3"].map((page, idx) => (
-				<Link href={`/secret-page-${page}`} key={idx}>
-					<button className="bg-green-500 text-white p-2 w-full mb-2">
-						Secret Page {page}
-					</button>
+		<div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 p-4">
+			{secretPages.map((page) => (
+				<Link href={`/secret-page-${page.id}`} key={page.id}>
+					<div className="bg-white hover:bg-green-200 cursor-pointer rounded-2xl shadow-md p-6 flex flex-col items-center justify-evenly h-48 transition duration-300 ease-in-out">
+						<div className="text-green-700">{page.icon}</div>
+						<div className="text-lg font-semibold text-center text-green-900">
+							{page.title}
+						</div>
+					</div>
 				</Link>
 			))}
-
-			<button
-				className="bg-red-500 text-white p-2 w-full mb-2"
-				onClick={handleLogout}
-			>
-				Logout
-			</button>
-			<button
-				className="bg-red-700 text-white p-2 w-full"
-				onClick={handleDelete}
-			>
-				Delete Account
-			</button>
 		</div>
 	);
 }

@@ -13,7 +13,8 @@ export default function SecretPage1() {
 
 	useEffect(() => {
 		const fetchData = async () => {
-			const { data: authData, error: authError } = await supabase.auth.getUser();
+			const { data: authData, error: authError } =
+				await supabase.auth.getUser();
 
 			if (authError || !authData?.user) {
 				console.error("No authenticated user found.");
@@ -24,15 +25,16 @@ export default function SecretPage1() {
 			const currentUser = authData.user;
 			setUser(currentUser);
 
-			
-
 			const { data: userMessages, error: fetchError } = await supabase
 				.from("secret_messages")
 				.select("*")
 				.eq("user_id", currentUser.id);
 
 			if (fetchError) {
-				console.error("Error fetching user messages:", fetchError.message);
+				console.error(
+					"Error fetching user messages:",
+					fetchError.message
+				);
 			} else {
 				setMessages(userMessages || []);
 			}
@@ -43,10 +45,12 @@ export default function SecretPage1() {
 		fetchData();
 	}, []);
 
-
-	if (loading) return <Loading loading={loading} />
+	if (loading) return <Loading loading={loading} />;
 	return (
-		<div className="max-w-xl mx-auto p-6 space-y-6">
+		<div className="w-auto mx-auto p-6 space-y-6">
+			<h1 className="text-2xl font-bold mb-4">
+				👋 Hello, {user?.user_metadata?.full_name}
+			</h1>
 			{/* User Messages */}
 			<Messages messages={messages} />
 		</div>
