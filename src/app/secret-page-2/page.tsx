@@ -4,18 +4,18 @@ import { useEffect, useState } from "react";
 import { supabase } from "@/helper/connection";
 import { User } from "@supabase/supabase-js";
 import Messages from "@/components/Messages";
-import OverwriteMessages from "@/components/OverwriteMessages";
 import Loading from "@/helper/Loading";
+import OverwriteMessages from "@/components/OverwriteMessages";
 
 export default function SecretPage2() {
 	const [user, setUser] = useState<User | null>(null);
 	const [messages, setMessages] = useState<any[]>([]);
-	const [message, setMessage] = useState<string | null>(null);
+	const [loading, setLoading] = useState(true);
 	const [newMessage, setNewMessage] = useState<string>("");
 	const [editingMessageId, setEditingMessageId] = useState<string | null>(
 		null
 	);
-	const [loading, setLoading] = useState(true);
+
 
 	useEffect(() => {
 		const fetchData = async () => {
@@ -43,7 +43,6 @@ export default function SecretPage2() {
 				);
 			} else {
 				setMessages(userMessages || []);
-				setMessage(userMessages?.[0]?.message || "");
 			}
 
 			setLoading(false);
