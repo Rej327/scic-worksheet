@@ -14,7 +14,11 @@ import {
 } from "react-icons/fa";
 import { background } from "../../public/assets";
 
-export default function Navigation({ children }: { children: React.ReactNode }) {
+export default function Navigation({
+	children,
+}: {
+	children: React.ReactNode;
+}) {
 	const [loading, setLoading] = useState(false);
 	const pathname = usePathname(); // ⬅️ Get current path
 
@@ -75,7 +79,9 @@ export default function Navigation({ children }: { children: React.ReactNode }) 
 			<Link
 				href={href}
 				className={`py-2 px-4 rounded flex items-center gap-4 transition ${
-					isActive ? "bg-white/30 font-semibold cursor-default" : "hover:bg-white/20"
+					isActive
+						? "bg-white/30 font-semibold cursor-default"
+						: "hover:bg-white/20"
 				}`}
 			>
 				{icon} {label}
@@ -103,7 +109,11 @@ export default function Navigation({ children }: { children: React.ReactNode }) 
 						SCIC Worksheet
 					</h2>
 					<nav className="flex flex-col gap-2 p-4">
-						<NavLink href="/" icon={<FaHome className="text-xl" />} label="Dashboard" />
+						<NavLink
+							href="/"
+							icon={<FaHome className="text-xl" />}
+							label="Dashboard"
+						/>
 						<NavLink
 							href="/secret-page-1"
 							icon={<FaEnvelope className="text-xl" />}

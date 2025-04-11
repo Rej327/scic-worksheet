@@ -61,7 +61,12 @@ export default function Home() {
 		fetchSession();
 	}, []);
 
-	if (loading) return <Loading loading={loading} />;
+	if (loading)
+		return (
+			<div className="w-screen h-screen">
+				<Loading loading={loading} />
+			</div>
+		);
 	return session ? (
 		<Navigation>
 			<Dashboard supabase={supabase} />
