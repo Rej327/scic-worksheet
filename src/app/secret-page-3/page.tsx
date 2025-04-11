@@ -10,31 +10,59 @@ import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 
 export default function SecretPage3() {
-	const [currentUser, setCurrentUser] = useState<any>(null);
 	const [user, setUser] = useState<User | null>(null);
+	const [messages, setMessages] = useState<any[]>([]);
+	const [loading, setLoading] = useState(true);
+	const [newMessage, setNewMessage] = useState<string>("");
+	const [editingMessageId, setEditingMessageId] = useState<string | null>(
+		null
+	);
+
+	const [currentUser, setCurrentUser] = useState<any>(null);
 	const [users, setUsers] = useState<any[]>([]);
 	const [friends, setFriends] = useState<any[]>([]);
 	const [requests, setRequests] = useState<any[]>([]);
-	const [loading, setLoading] = useState(true);
+
 	const [sentRequests, setSentRequests] = useState<any[]>([]);
 	const [viewedMessages, setViewedMessages] = useState<{
 		[key: string]: string[];
 	}>({});
 	const [viewingError, setViewingError] = useState<string | null>(null);
-	const [messages, setMessages] = useState<any[]>([]);
 	const [friendMessages, setFriendMessages] = useState<any[]>([]);
-	const [message, setMessage] = useState<string | null>(null);
-	const [newMessage, setNewMessage] = useState<string>("");
-	const [editingMessageId, setEditingMessageId] = useState<string | null>(
-		null
-	);
 	const [isMyMessage, setIsMyMessage] = useState<boolean>(true);
 
 	const router = useRouter();
 
 	useEffect(() => {
 		const fetchData = async () => {
-			//   setLoading(true);
+			// ✅ Original logic
+			const { data: authData, error: authError } =
+				await supabase.auth.getUser();
+
+			if (authError || !authData?.user) {
+				console.error("No authenticated user found.");
+				setLoading(false);
+				return;
+			}
+
+			const currentUser = authData.user;
+			setUser(currentUser);
+
+			const { data: userMessages, error: fetchError } = await supabase
+				.from("secret_messages")
+				.select("*")
+				.eq("user_id", currentUser.id);
+
+			if (fetchError) {
+				console.error(
+					"Error fetching user messages:",
+					fetchError.message
+				);
+			} else {
+				setMessages(userMessages || []);
+			}
+
+			// ✅ New extended logic
 			const {
 				data: { session },
 			} = await supabase.auth.getSession();
@@ -47,24 +75,20 @@ export default function SecretPage3() {
 			const user = session.user;
 			setCurrentUser(user);
 
-			// Fetch all profiles
 			const { data: allUsers } = await supabase
 				.from("profile")
 				.select("*");
 
-			// Fetch friend requests (either sent or received)
 			const { data: allRequests } = await supabase
-				.from("friend_request")
+				.from("friend_status")
 				.select("*")
 				.or(`sender_id.eq.${user.id},receiver_id.eq.${user.id}`);
 
-			//Get current user message
 			const { data: userMessage, error } = await supabase
 				.from("secret_messages")
 				.select("*")
 				.eq("user_id", user.id);
 
-			// Get accepted friends
 			const accepted = allRequests?.filter(
 				(r) => r.status === "accepted"
 			);
@@ -72,12 +96,10 @@ export default function SecretPage3() {
 				r.sender_id === user.id ? r.receiver_id : r.sender_id
 			);
 
-			// Get pending requests sent TO the user
 			const incoming = allRequests?.filter(
 				(r) => r.receiver_id === user.id && r.status === "pending"
 			);
 
-			// Determine who are NOT friends and NOT the current user
 			const nonFriends = allUsers?.filter(
 				(u) =>
 					u.id !== user.id &&
@@ -92,7 +114,6 @@ export default function SecretPage3() {
 					)
 			);
 
-			// Map incoming requests and attach sender full name
 			const enrichedRequests = incoming?.map((req) => {
 				const senderProfile = allUsers?.find(
 					(u) => u.id === req.sender_id
@@ -103,12 +124,10 @@ export default function SecretPage3() {
 				};
 			});
 
-			// Get pending requests sent BY the user
 			const outgoing = allRequests?.filter(
 				(r) => r.sender_id === user.id && r.status === "pending"
 			);
 
-			// Map sent requests and attach receiver profile
 			const enrichedSentRequests = outgoing?.map((req) => {
 				const receiverProfile = allUsers?.find(
 					(u) => u.id === req.receiver_id
@@ -120,7 +139,6 @@ export default function SecretPage3() {
 				};
 			});
 
-			// Set all states
 			setMessages(userMessage || []);
 			setUsers(nonFriends || []);
 			setFriends(
@@ -146,7 +164,7 @@ export default function SecretPage3() {
 		);
 		setUsers(updatedUsers);
 
-		const { error } = await supabase.from("friend_request").insert([
+		const { error } = await supabase.from("friend_status").insert([
 			{
 				sender_id: currentUser.id,
 				receiver_id,
@@ -167,7 +185,7 @@ export default function SecretPage3() {
 
 		// Find the request sent by the current user to the receiver
 		const { data: sentRequests } = await supabase
-			.from("friend_request")
+			.from("friend_status")
 			.select("*")
 			.eq("sender_id", currentUser.id)
 			.eq("receiver_id", receiver_id)
@@ -178,7 +196,7 @@ export default function SecretPage3() {
 
 			// Delete the request from the database
 			const { error } = await supabase
-				.from("friend_request")
+				.from("friend_status")
 				.delete()
 				.eq("id", requestId);
 
@@ -204,7 +222,7 @@ export default function SecretPage3() {
 	) => {
 		if (status === "accepted") {
 			const { error } = await supabase
-				.from("friend_request")
+				.from("friend_status")
 				.update({ status })
 				.eq("id", id);
 
@@ -217,7 +235,7 @@ export default function SecretPage3() {
 			}
 		} else if (status === "rejected") {
 			const { error } = await supabase
-				.from("friend_request")
+				.from("friend_status")
 				.delete()
 				.eq("id", id);
 
@@ -335,26 +353,19 @@ export default function SecretPage3() {
 				}
 			/>
 
-			{isMyMessage ? (
-				<OverwriteMessages
-					message={messages}
-					newMessage={newMessage}
-					editingMessageId={editingMessageId}
-					messages={messages}
-					setNewMessage={setNewMessage}
-					setEditingMessageId={setEditingMessageId}
-					handleSaveMessage={handleSaveMessage}
-					handleEditMessage={handleEditMessage}
-					handleDeleteMessage={handleDeleteMessage}
-				/>
-			) : (
-				<button
-					onClick={cancelViewFriendMessage}
-					className="w-full p-2 bg-blue-500 text-white rounded-md hover:bg-blue-600"
-				>
-					View Your Message
-				</button>
-			)}
+			<OverwriteMessages
+				message={messages}
+				newMessage={newMessage}
+				editingMessageId={editingMessageId}
+				messages={messages}
+				setNewMessage={setNewMessage}
+				setEditingMessageId={setEditingMessageId}
+				handleSaveMessage={handleSaveMessage}
+				handleEditMessage={handleEditMessage}
+				handleDeleteMessage={handleDeleteMessage}
+				disabled={!isMyMessage}
+				onGoBack={cancelViewFriendMessage}
+			/>
 
 			<Social
 				users={users}

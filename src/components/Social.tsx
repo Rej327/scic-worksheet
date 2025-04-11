@@ -141,11 +141,16 @@ const Social: React.FC<Props> = ({
 					</>
 				)}
 
-				{users.length === 0
-					? null
-					: users.map((user) => (
+				{users.length === 0 ? null : (
+					<>
+						<h2 className="text-xl font-semibold mb-2">
+							People You May Know
+						</h2>{" "}
+						{users.map((user) => (
 							<PersonCard key={user.id} user={user} />
-					  ))}
+						))}
+					</>
+				)}
 			</section>
 
 			{/* Pending Friend Requests */}
