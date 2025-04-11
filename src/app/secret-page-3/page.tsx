@@ -264,11 +264,12 @@ export default function SecretPage3() {
 	};
 
 	const handleSaveMessage = async () => {
-		if (!user) return;
+		if (!currentUser) return;
 
 		const messageToSave = {
-			user_id: user.id,
+			user_id: currentUser.id,
 			message: newMessage,
+			updated_at: new Date().toISOString(),
 		};
 
 		let saveError;
@@ -336,7 +337,7 @@ export default function SecretPage3() {
 
 			{isMyMessage ? (
 				<OverwriteMessages
-					message={message ?? ""}
+					message={messages}
 					newMessage={newMessage}
 					editingMessageId={editingMessageId}
 					messages={messages}

@@ -58,6 +58,7 @@ export default function SecretPage2() {
 		const messageToSave = {
 			user_id: user.id,
 			message: newMessage,
+			updated_at: new Date().toISOString(),
 		};
 
 		let saveError;
@@ -113,7 +114,7 @@ export default function SecretPage2() {
 			{/* User Messages */}
 			<Messages messages={messages} />
 			<OverwriteMessages
-				message={message ?? ""}
+				message={messages}
 				newMessage={newMessage}
 				editingMessageId={editingMessageId}
 				messages={messages}

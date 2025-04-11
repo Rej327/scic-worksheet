@@ -6,7 +6,7 @@ interface Message {
 }
 
 interface OverwriteMessagesProps {
-  message: string | null;
+  message: Message[];
   newMessage: string;
   editingMessageId: string | null;
   messages: Message[];
@@ -37,7 +37,7 @@ export default function OverwriteMessages({
 			</h2>
 
 			<div className="mb-4">
-				<p className="text-gray-700">Recent Message: {message}</p>
+				{/* <p className="text-gray-700">Recent Message: {message}</p> */}
 			</div>
 
 			<textarea
@@ -49,7 +49,7 @@ export default function OverwriteMessages({
 
 			<div className="flex space-x-2">
 				<button
-					className="w-full p-2 bg-blue-500 text-white rounded-md hover:bg-blue-600"
+					className="w-full p-2 bg-blue-500 text-white rounded-md hover:bg-blue-600 cursor-pointer"
 					onClick={handleSaveMessage}
 				>
 					{editingMessageId ? "Update Message" : "Save Message"}
@@ -83,7 +83,7 @@ export default function OverwriteMessages({
 								</span>
 								<div className="flex space-x-2 shrink-0">
 									<button
-										className="px-3 py-1 bg-yellow-400 text-white rounded-md hover:bg-yellow-500 text-sm"
+										className="cursor-pointer px-3 py-1 bg-yellow-500 text-white rounded-full hover:bg-yellow-600 shadow-sm text-sm"
 										onClick={() =>
 											handleEditMessage(
 												msg.id,
@@ -94,7 +94,7 @@ export default function OverwriteMessages({
 										Edit
 									</button>
 									<button
-										className="px-3 py-1 bg-red-500 text-white rounded-md hover:bg-red-600 text-sm"
+										className="cursor-pointer px-3 py-1 bg-red-500 text-white rounded-full hover:bg-red-600 shadow-sm text-sm"
 										onClick={() =>
 											handleDeleteMessage(msg.id)
 										}

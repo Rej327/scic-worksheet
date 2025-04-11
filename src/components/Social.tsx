@@ -1,4 +1,10 @@
 import React from "react";
+import { FaEnvelope } from "react-icons/fa";
+import { GiConfirmed } from "react-icons/gi";
+import { IoMdPersonAdd } from "react-icons/io";
+import { MdDeleteSweep } from "react-icons/md";
+import { TbCancel } from "react-icons/tb";
+import IconWithTooltip from "./IconWithTooltip";
 
 interface User {
 	id: string;
@@ -63,26 +69,26 @@ const Social: React.FC<Props> = ({
 			<div className="flex justify-between gap-2 items-center rounded-md bg-white shadow-md p-5">
 				<span>{user.full_name}</span>
 				<div className="flex gap-4">
-					<button
-						className="bg-purple-500 text-white px-3 py-1 rounded w-fit"
+					<IconWithTooltip
+						text="View Secret Message"
+						textColor="text-violet-500"
+						icon={<FaEnvelope size={20} />}
 						onClick={() => viewMessages(user.id)}
-					>
-						View Messages
-					</button>
+					/>
 					{isFriend ? null : user.requestSent ? (
-						<button
-							className="bg-gray-400 text-white px-3 py-1 rounded"
+						<IconWithTooltip
+							text="Cancel Request"
+							textColor="text-red-500"
+							icon={<TbCancel size={20} />}
 							onClick={() => cancelRequest(user.id)}
-						>
-							Cancel Request
-						</button>
+						/>
 					) : (
-						<button
-							className="bg-blue-500 text-white px-3 py-1 rounded"
+						<IconWithTooltip
+							text="Friend Request"
+							textColor="text-blue-500"
+							icon={<IoMdPersonAdd size={20} />}
 							onClick={() => sendRequest(user.id)}
-						>
-							Add Friend
-						</button>
+						/>
 					)}
 				</div>
 			</div>
@@ -99,38 +105,41 @@ const Social: React.FC<Props> = ({
 		<div className="w-[40vw]">
 			{/* People You May Know */}
 			<section>
-				<h2 className="text-xl font-semibold mb-2">
-					People You May Know
-				</h2>
-
-				{sentRequests.map((req, i) => (
-					<div
-						key={i}
-						className="flex flex-col gap-2 p-2 rounded mb-2"
-					>
-						<div className="flex justify-between gap-2 items-center rounded-md bg-white shadow-md p-5">
-							<span>{req.receiver_full_name}</span>
-							<div className="flex gap-4">
-								<button
-									className="bg-purple-500 text-white px-3 py-1 rounded w-fit"
-									onClick={() =>
-										viewMessages(req.receiver_id)
-									}
-								>
-									View Messages
-								</button>
-								<button
-									className="bg-gray-400 text-white px-3 py-1 rounded"
-									onClick={() =>
-										cancelRequest(req.receiver_id)
-									}
-								>
-									Cancel Request
-								</button>
+				{sentRequests.length === 0 ? null : (
+					<>
+						<h2 className="text-xl font-semibold mb-2">
+							People You May Know
+						</h2>
+						{sentRequests.map((req, i) => (
+							<div
+								key={i}
+								className="flex flex-col gap-2 p-2 rounded mb-2"
+							>
+								<div className="flex justify-between gap-2 items-center rounded-md bg-white shadow-md p-5">
+									<span>{req.receiver_full_name}</span>
+									<div className="flex gap-4">
+										<IconWithTooltip
+											text="View Secret Message"
+											textColor="text-violet-500"
+											icon={<FaEnvelope size={20} />}
+											onClick={() =>
+												viewMessages(req.receiver_id)
+											}
+										/>
+										<IconWithTooltip
+											text="Cancel Request"
+											textColor="text-red-500"
+											icon={<TbCancel size={20} />}
+											onClick={() =>
+												cancelRequest(req.receiver_id)
+											}
+										/>
+									</div>
+								</div>
 							</div>
-						</div>
-					</div>
-				))}
+						))}
+					</>
+				)}
 
 				{users.length === 0
 					? null
@@ -153,29 +162,34 @@ const Social: React.FC<Props> = ({
 							>
 								<div className="flex justify-between gap-2 items-center rounded-md bg-white shadow-md p-5">
 									<span>{req.sender_full_name}</span>
-									<div className="space-x-2">
-										<button
-											className="bg-green-500 text-white px-3 py-1 rounded"
-											onClick={() =>
-												respondToRequest(
-													req.id,
-													"accepted"
-												)
-											}
-										>
-											Accept
-										</button>
-										<button
-											className="bg-red-500 text-white px-3 py-1 rounded"
-											onClick={() =>
-												respondToRequest(
-													req.id,
-													"rejected"
-												)
-											}
-										>
-											Reject
-										</button>
+									<div className="space-x-1">
+										<div className="flex gap-2">
+											<IconWithTooltip
+												text="Accept Request"
+												textColor="text-green-500"
+												icon={<GiConfirmed size={20} />}
+												onClick={() =>
+													respondToRequest(
+														req.id,
+														"accepted"
+													)
+												}
+											/>
+
+											<IconWithTooltip
+												text="Reject Request"
+												textColor="text-red-500"
+												icon={
+													<MdDeleteSweep size={20} />
+												}
+												onClick={() =>
+													respondToRequest(
+														req.id,
+														"rejected"
+													)
+												}
+											/>
+										</div>
 									</div>
 								</div>
 							</div>

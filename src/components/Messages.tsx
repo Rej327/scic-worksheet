@@ -1,4 +1,5 @@
 import React from "react";
+import { FaRegClock } from "react-icons/fa";
 
 interface Message {
 	id: string;
@@ -38,12 +39,14 @@ export default function Messages({
 									{msg.message}
 								</p>
 								{msg.updated_at && (
-									<p className="text-xs text-gray-500 italic">
-										Last updated:{" "}
-										{new Date(
-											msg.updated_at
-										).toLocaleString()}
-									</p>
+									<div className="flex items-center gap-1">
+										<FaRegClock size={12} />{" "}
+										<p className="text-xs text-gray-500 italic">
+											{new Date(
+												msg.updated_at
+											).toLocaleString()}
+										</p>
+									</div>
 								)}
 							</div>
 						))}
