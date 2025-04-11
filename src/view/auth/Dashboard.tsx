@@ -1,5 +1,6 @@
 "use client";
 
+import Loading from "@/helper/Loading";
 import { SupabaseClient, User } from "@supabase/supabase-js";
 import Link from "next/link";
 import React, { useEffect, useState } from "react";
@@ -72,7 +73,7 @@ export default function Dashboard({ supabase }: DashboardProps) {
 		}
 	};
 
-	if(loading) return <p>Loading ...</p>
+	if (loading) return <Loading loading={loading} />;
 
 	return (
 		<div className="p-6 max-w-md mx-auto">

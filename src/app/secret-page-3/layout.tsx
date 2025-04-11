@@ -3,6 +3,8 @@
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { supabase } from "@/helper/connection";
+import Loading from "@/helper/Loading";
+import Navigation from "@/components/Navigation";
 
 export default function SecretLayout({
 	children,
@@ -10,7 +12,7 @@ export default function SecretLayout({
 	children: React.ReactNode;
 }) {
 	const router = useRouter();
-	const [loading, setLoading] = useState(true);
+	const [loading, setLoading] = useState(false);
 
 	useEffect(() => {
 		const checkUser = async () => {
@@ -26,9 +28,6 @@ export default function SecretLayout({
 		checkUser();
 	}, [router]);
 
-	if (loading) {
-		return <div>Loading...</div>;
-	}
-
-	return <>{children}</>; // Only render the children when user is authenticated
+	if (loading) return <Loading loading={loading} />;
+	return <Navigation>{children}</Navigation>;
 }

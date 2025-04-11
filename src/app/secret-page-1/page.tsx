@@ -3,6 +3,8 @@
 import { useEffect, useState } from "react";
 import { supabase } from "@/helper/connection";
 import { User } from "@supabase/supabase-js";
+import Messages from "@/components/Messages";
+import Loading from "@/helper/Loading";
 
 export default function SecretPage1() {
 	const [user, setUser] = useState<User | null>(null);
@@ -42,36 +44,11 @@ export default function SecretPage1() {
 	}, []);
 
 
-	if (loading) {
-		return (
-			<div className="text-center mt-10 text-gray-500">
-				<span className="animate-pulse">Loading...</span>
-			</div>
-		);
-	}
-
+	if (loading) return <Loading loading={loading} />
 	return (
 		<div className="max-w-xl mx-auto p-6 space-y-6">
 			{/* User Messages */}
-			<div className="bg-white rounded-lg shadow-md p-5">
-				<h1 className="text-xl font-bold mb-4 text-center">Your Secret Messages</h1>
-				{messages.length === 0 ? (
-					<div className="text-center text-gray-600 bg-gray-100 p-4 rounded-md">
-						You haven't written any secret messages yet.
-					</div>
-				) : (
-					<div className="space-y-4">
-						{messages.map((msg) => (
-							<div
-								key={msg.id}
-								className="p-4 bg-blue-50 border border-blue-200 rounded-md shadow-sm"
-							>
-								<p className="text-gray-800 whitespace-pre-wrap">{msg.message}</p>
-							</div>
-						))}
-					</div>
-				)}
-			</div>
+			<Messages messages={messages} />
 		</div>
 	);
 }
