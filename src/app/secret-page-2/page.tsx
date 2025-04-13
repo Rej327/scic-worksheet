@@ -6,6 +6,8 @@ import { User } from "@supabase/supabase-js";
 import Messages from "@/components/Messages";
 import Loading from "@/helper/Loading";
 import OverwriteMessages from "@/components/OverwriteMessages";
+import api from "@/api/api";
+import { createMessage, updateMessage } from "@/api/message";
 
 export default function SecretPage2() {
 	const [user, setUser] = useState<User | null>(null);
@@ -15,7 +17,6 @@ export default function SecretPage2() {
 	const [editingMessageId, setEditingMessageId] = useState<string | null>(
 		null
 	);
-
 
 	useEffect(() => {
 		const fetchData = async () => {
@@ -31,10 +32,8 @@ export default function SecretPage2() {
 			const currentUser = authData.user;
 			setUser(currentUser);
 
-			const { data: userMessages, error: fetchError } = await supabase
-				.from("secret_messages")
-				.select("*")
-				.eq("user_id", currentUser.id);
+			const { data: userMessages, error: fetchError } =
+				await api.getMessageById(currentUser.id);
 
 			if (fetchError) {
 				console.error(
@@ -63,15 +62,11 @@ export default function SecretPage2() {
 		let saveError;
 
 		if (editingMessageId) {
-			const { error } = await supabase
-				.from("secret_messages")
-				.update({ message: newMessage })
-				.eq("id", editingMessageId);
+
+			const { error } = await updateMessage(newMessage, editingMessageId);
 			saveError = error;
 		} else {
-			const { error } = await supabase
-				.from("secret_messages")
-				.upsert(messageToSave);
+			const { error } = await createMessage(messageToSave);
 			saveError = error;
 		}
 
@@ -90,10 +85,7 @@ export default function SecretPage2() {
 
 	const handleDeleteMessage = async (id: string) => {
 		if (confirm("Are you sure you want to delete this message?")) {
-			const { error } = await supabase
-				.from("secret_messages")
-				.delete()
-				.eq("id", id);
+			const { error } = await api.deleteMessage(id)
 			if (error) {
 				console.error("Delete error:", error.message);
 			} else {

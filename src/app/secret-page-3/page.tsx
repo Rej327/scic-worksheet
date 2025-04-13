@@ -1,5 +1,7 @@
 "use client";
 
+import api from "@/api/api";
+import { createMessage, updateMessage } from "@/api/message";
 import Messages from "@/components/Messages";
 import OverwriteMessages from "@/components/OverwriteMessages";
 import Social from "@/components/Social";
@@ -48,10 +50,8 @@ export default function SecretPage3() {
 			const currentUser = authData.user;
 			setUser(currentUser);
 
-			const { data: userMessages, error: fetchError } = await supabase
-				.from("secret_messages")
-				.select("*")
-				.eq("user_id", currentUser.id);
+			const { data: userMessages, error: fetchError } =
+				await api.getMessageById(currentUser.id);
 
 			if (fetchError) {
 				console.error(
@@ -75,19 +75,9 @@ export default function SecretPage3() {
 			const user = session.user;
 			setCurrentUser(user);
 
-			const { data: allUsers } = await supabase
-				.from("profile")
-				.select("*");
+			const { data: allUsers } = await api.getProfile();
 
-			const { data: allRequests } = await supabase
-				.from("friend_status")
-				.select("*")
-				.or(`sender_id.eq.${user.id},receiver_id.eq.${user.id}`);
-
-			const { data: userMessage, error } = await supabase
-				.from("secret_messages")
-				.select("*")
-				.eq("user_id", user.id);
+			const { data: allRequests } = await api.getFriendsByBothId(user.id);
 
 			const accepted = allRequests?.filter(
 				(r) => r.status === "accepted"
@@ -139,7 +129,7 @@ export default function SecretPage3() {
 				};
 			});
 
-			setMessages(userMessage || []);
+			// setMessages(userMessage || []);
 			setUsers(nonFriends || []);
 			setFriends(
 				allUsers?.filter((u) => friendIds?.includes(u.id)) || []
@@ -164,12 +154,10 @@ export default function SecretPage3() {
 		);
 		setUsers(updatedUsers);
 
-		const { error } = await supabase.from("friend_status").insert([
-			{
-				sender_id: currentUser.id,
-				receiver_id,
-			},
-		]);
+		const { error } = await api.sentRequest({
+			sender_id: currentUser.id,
+			receiver_id: receiver_id,
+		});
 
 		if (error) {
 			alert("Error sending request");
@@ -184,21 +172,16 @@ export default function SecretPage3() {
 		if (!currentUser) return;
 
 		// Find the request sent by the current user to the receiver
-		const { data: sentRequests } = await supabase
-			.from("friend_status")
-			.select("*")
-			.eq("sender_id", currentUser.id)
-			.eq("receiver_id", receiver_id)
-			.eq("status", "pending");
+		const { data: sentRequests } = await api.cancelRequest({
+			currentUserId: currentUser.id,
+			receiver_id: receiver_id,
+		});
 
 		if (sentRequests && sentRequests.length > 0) {
 			const requestId = sentRequests[0].id;
 
 			// Delete the request from the database
-			const { error } = await supabase
-				.from("friend_status")
-				.delete()
-				.eq("id", requestId);
+			const { error } = await api.deleteRequest(requestId);
 
 			if (error) {
 				alert("Error canceling request");
@@ -211,7 +194,9 @@ export default function SecretPage3() {
 						? { ...user, requestSent: false } // Mark that the request was canceled
 						: user
 				);
+
 				setUsers(updatedUsers);
+				location.reload();
 			}
 		}
 	};
@@ -221,10 +206,10 @@ export default function SecretPage3() {
 		status: "accepted" | "rejected"
 	) => {
 		if (status === "accepted") {
-			const { error } = await supabase
-				.from("friend_status")
-				.update({ status })
-				.eq("id", id);
+			const { error } = await api.acceptRequest({
+				status: status,
+				id: id,
+			});
 
 			if (error) {
 				alert("Error accepting request");
@@ -234,10 +219,7 @@ export default function SecretPage3() {
 				location.reload();
 			}
 		} else if (status === "rejected") {
-			const { error } = await supabase
-				.from("friend_status")
-				.delete()
-				.eq("id", id);
+			const { error } = await api.rejectRequest(id);
 
 			if (error) {
 				alert("Error rejecting request");
@@ -264,10 +246,7 @@ export default function SecretPage3() {
 		}
 
 		try {
-			const { data, error } = await supabase
-				.from("secret_messages")
-				.select("*")
-				.eq("user_id", friendId);
+			const { data, error } = await api.getMessageById(friendId);
 
 			if (error) {
 				console.error("❌ Supabase Fetch Error:", error);
@@ -293,15 +272,10 @@ export default function SecretPage3() {
 		let saveError;
 
 		if (editingMessageId) {
-			const { error } = await supabase
-				.from("secret_messages")
-				.update({ message: newMessage })
-				.eq("id", editingMessageId);
+			const { error } = await updateMessage(newMessage, editingMessageId);
 			saveError = error;
 		} else {
-			const { error } = await supabase
-				.from("secret_messages")
-				.upsert(messageToSave);
+			const { error } = await createMessage(messageToSave);
 			saveError = error;
 		}
 
@@ -320,10 +294,7 @@ export default function SecretPage3() {
 
 	const handleDeleteMessage = async (id: string) => {
 		if (confirm("Are you sure you want to delete this message?")) {
-			const { error } = await supabase
-				.from("secret_messages")
-				.delete()
-				.eq("id", id);
+			const { error } = await api.deleteMessage(id);
 			if (error) {
 				console.error("Delete error:", error.message);
 			} else {

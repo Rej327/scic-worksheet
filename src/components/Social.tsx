@@ -105,10 +105,21 @@ const Social: React.FC<Props> = ({
 		<div className="w-[40vw]">
 			{/* People You May Know */}
 			<section>
-				{sentRequests.length === 0 ? null : (
+				{users.length === 0 ? null : (
 					<>
 						<h2 className="text-xl font-semibold mb-2">
 							People You May Know
+						</h2>{" "}
+						{users.map((user) => (
+							<PersonCard key={user.id} user={user} />
+						))}
+					</>
+				)}
+
+				{sentRequests.length === 0 ? null : (
+					<>
+						<h2 className="text-xl font-semibold mb-2">
+							Sent Friend Requests
 						</h2>
 						{sentRequests.map((req, i) => (
 							<div
@@ -137,17 +148,6 @@ const Social: React.FC<Props> = ({
 									</div>
 								</div>
 							</div>
-						))}
-					</>
-				)}
-
-				{users.length === 0 ? null : (
-					<>
-						<h2 className="text-xl font-semibold mb-2">
-							People You May Know
-						</h2>{" "}
-						{users.map((user) => (
-							<PersonCard key={user.id} user={user} />
 						))}
 					</>
 				)}

@@ -5,6 +5,7 @@ import { supabase } from "@/helper/connection";
 import { User } from "@supabase/supabase-js";
 import Messages from "@/components/Messages";
 import Loading from "@/helper/Loading";
+import api from "@/api/api";
 
 export default function SecretPage1() {
 	const [user, setUser] = useState<User | null>(null);
@@ -25,10 +26,8 @@ export default function SecretPage1() {
 			const currentUser = authData.user;
 			setUser(currentUser);
 
-			const { data: userMessages, error: fetchError } = await supabase
-				.from("secret_messages")
-				.select("*")
-				.eq("user_id", currentUser.id);
+			const { data: userMessages, error: fetchError } =
+				await api.getMessageById(currentUser.id);
 
 			if (fetchError) {
 				console.error(
