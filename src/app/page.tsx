@@ -3,8 +3,8 @@
 import Navigation from "@/components/Navigation";
 import { supabase } from "@/helper/connection";
 import Loading from "@/helper/Loading";
-import Auth from "@/view/Auth";
 import Dashboard from "@/view/auth/Dashboard";
+import Auth from "@/view/public/Auth";
 
 import { useEffect, useState } from "react";
 
