@@ -8,23 +8,33 @@ import Loading from "@/helper/Loading";
 import OverwriteMessages from "@/components/OverwriteMessages";
 import api from "@/api/api";
 import { createMessage, updateMessage } from "@/api/message";
+import toast from "react-hot-toast";
+import ConfirmationDeleteModal from "@/components/ConfirmationModal";
 
 export default function SecretPage2() {
+	// ✅ Secret Page 1 inherited State
 	const [user, setUser] = useState<User | null>(null);
 	const [messages, setMessages] = useState<any[]>([]);
 	const [loading, setLoading] = useState(true);
+
+	// ✅ Added State
 	const [newMessage, setNewMessage] = useState<string>("");
 	const [editingMessageId, setEditingMessageId] = useState<string | null>(
 		null
 	);
+	const [showDeleteModal, setShowDeleteModal] = useState(false);
+	const [messageToDeleteId, setMessageToDeleteId] = useState<string | null>(
+		null
+	);
 
+	// ✅ Secret Page 1 inherited Logic
 	useEffect(() => {
 		const fetchData = async () => {
 			const { data: authData, error: authError } =
 				await supabase.auth.getUser();
 
 			if (authError || !authData?.user) {
-				console.error("No authenticated user found.");
+				toast.error("No authenticated user found.");
 				setLoading(false);
 				return;
 			}
@@ -36,10 +46,7 @@ export default function SecretPage2() {
 				await api.getMessageById(currentUser.id);
 
 			if (fetchError) {
-				console.error(
-					"Error fetching user messages:",
-					fetchError.message
-				);
+				toast.error("Error fetching user messages:");
 			} else {
 				setMessages(userMessages || []);
 			}
@@ -50,6 +57,7 @@ export default function SecretPage2() {
 		fetchData();
 	}, []);
 
+	// ✅ Added Logic
 	const handleSaveMessage = async () => {
 		if (!user) return;
 
@@ -59,22 +67,26 @@ export default function SecretPage2() {
 			updated_at: new Date().toISOString(),
 		};
 
-		let saveError;
+		try {
+			let result;
 
-		if (editingMessageId) {
+			if (editingMessageId) {
+				result = await updateMessage(newMessage, editingMessageId);
+				toast.success("Secret message updated!");
+			} else {
+				result = await createMessage(messageToSave);
+				toast.success("Secret message saved!");
+			}
 
-			const { error } = await updateMessage(newMessage, editingMessageId);
-			saveError = error;
-		} else {
-			const { error } = await createMessage(messageToSave);
-			saveError = error;
-		}
-
-		if (saveError) {
-			console.error("Error saving message:", saveError.message);
-		} else {
-			alert("Secret message saved!");
-			location.reload(); // consider using re-fetch instead
+			if (result.error) {
+				toast.error("Something went wrong!");
+			}
+		} catch (error: any) {
+			toast.error("Failed to save message. Please try again.");
+		} finally {
+			setTimeout(() => {
+				location.reload();
+			}, 1500);
 		}
 	};
 
@@ -83,16 +95,31 @@ export default function SecretPage2() {
 		setNewMessage(text);
 	};
 
-	const handleDeleteMessage = async (id: string) => {
-		if (confirm("Are you sure you want to delete this message?")) {
-			const { error } = await api.deleteMessage(id)
+	const handleDeleteMessage = async () => {
+		if (!messageToDeleteId) return;
+
+		try {
+			const { error } = await api.deleteMessage(messageToDeleteId);
+
 			if (error) {
-				console.error("Delete error:", error.message);
-			} else {
-				alert("Message deleted");
-				location.reload(); // consider using re-fetch instead
+				toast.error("Something went Wrong!");
 			}
+
+			toast.success("Message deleted!");
+		} catch (err: any) {
+			toast.error("Failed to delete message.");
+		} finally {
+			setShowDeleteModal(false);
+			setMessageToDeleteId(null);
+			setTimeout(() => {
+				location.reload();
+			}, 1500);
 		}
+	};
+
+	const confirmDelete = (id: string) => {
+		setMessageToDeleteId(id);
+		setShowDeleteModal(true);
 	};
 
 	if (loading) return <Loading loading={loading} />;
@@ -102,8 +129,9 @@ export default function SecretPage2() {
 			<h1 className="text-2xl font-bold mb-4">
 				👋 Hello, {user?.user_metadata?.full_name}
 			</h1>
-			{/* User Messages */}
+
 			<Messages messages={messages} />
+
 			<OverwriteMessages
 				message={messages}
 				newMessage={newMessage}
@@ -113,7 +141,15 @@ export default function SecretPage2() {
 				setEditingMessageId={setEditingMessageId}
 				handleSaveMessage={handleSaveMessage}
 				handleEditMessage={handleEditMessage}
-				handleDeleteMessage={handleDeleteMessage}
+				handleDeleteMessage={confirmDelete}
+			/>
+
+			<ConfirmationDeleteModal
+				title="delete"
+				text="Are you sure you want to delete this message?"
+				isOpen={showDeleteModal}
+				onClose={() => setShowDeleteModal(false)}
+				onConfirm={handleDeleteMessage}
 			/>
 		</div>
 	);

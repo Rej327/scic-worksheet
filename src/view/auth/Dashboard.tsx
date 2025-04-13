@@ -27,53 +27,6 @@ export default function Dashboard({ supabase }: DashboardProps) {
 		fetchUser();
 	}, [supabase]);
 
-	const handleLogout = async () => {
-		try {
-			setLoading(true);
-			await supabase.auth.signOut();
-		} catch {
-			console.log("Error on logout");
-		} finally {
-			setLoading(false);
-		}
-	};
-
-	const handleDelete = async () => {
-		const { data: userData, error: userError } =
-			await supabase.auth.getUser();
-
-		if (userError) {
-			console.error("Error fetching user:", userError.message);
-			return;
-		}
-
-		const id = userData?.user?.id;
-
-		if (!id) {
-			console.error("User ID is missing");
-			return;
-		}
-
-		try {
-			console.log("User ID to delete:", id);
-
-			const { error } = await supabase.auth.admin.deleteUser(id);
-			if (error) {
-				console.error("Error deleting user:", error.message);
-				return;
-			} else {
-				console.log("User deleted successfully");
-			}
-
-			console.log("User deleted successfully");
-
-			await supabase.auth.signOut();
-			location.reload();
-		} catch (error) {
-			console.error("Unexpected error during user deletion:", error);
-		}
-	};
-
 	if (loading) return <Loading loading={loading} />;
 
 	const secretPages = [

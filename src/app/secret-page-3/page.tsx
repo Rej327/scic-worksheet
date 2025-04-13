@@ -2,6 +2,7 @@
 
 import api from "@/api/api";
 import { createMessage, updateMessage } from "@/api/message";
+import ConfirmationDeleteModal from "@/components/ConfirmationModal";
 import Messages from "@/components/Messages";
 import OverwriteMessages from "@/components/OverwriteMessages";
 import Social from "@/components/Social";
@@ -10,21 +11,29 @@ import Loading from "@/helper/Loading";
 import { User } from "@supabase/supabase-js";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
+import toast from "react-hot-toast";
 
 export default function SecretPage3() {
+	// ✅ Secret Page 1 inherited State
 	const [user, setUser] = useState<User | null>(null);
 	const [messages, setMessages] = useState<any[]>([]);
 	const [loading, setLoading] = useState(true);
+
+	// ✅ Secret Page 2 inherited Logic
 	const [newMessage, setNewMessage] = useState<string>("");
 	const [editingMessageId, setEditingMessageId] = useState<string | null>(
 		null
 	);
+	const [showDeleteModal, setShowDeleteModal] = useState(false);
+	const [messageToDeleteId, setMessageToDeleteId] = useState<string | null>(
+		null
+	);
 
+	// ✅ Added State
 	const [currentUser, setCurrentUser] = useState<any>(null);
 	const [users, setUsers] = useState<any[]>([]);
 	const [friends, setFriends] = useState<any[]>([]);
 	const [requests, setRequests] = useState<any[]>([]);
-
 	const [sentRequests, setSentRequests] = useState<any[]>([]);
 	const [viewedMessages, setViewedMessages] = useState<{
 		[key: string]: string[];
@@ -32,17 +41,18 @@ export default function SecretPage3() {
 	const [viewingError, setViewingError] = useState<string | null>(null);
 	const [friendMessages, setFriendMessages] = useState<any[]>([]);
 	const [isMyMessage, setIsMyMessage] = useState<boolean>(true);
+	const [error, setError] = useState<Error | null>(null);
 
 	const router = useRouter();
 
+	// ✅ Secret Page 1 inherited Logic
 	useEffect(() => {
 		const fetchData = async () => {
-			// ✅ Original logic
 			const { data: authData, error: authError } =
 				await supabase.auth.getUser();
 
 			if (authError || !authData?.user) {
-				console.error("No authenticated user found.");
+				toast.error("No authenticated user found.");
 				setLoading(false);
 				return;
 			}
@@ -54,21 +64,91 @@ export default function SecretPage3() {
 				await api.getMessageById(currentUser.id);
 
 			if (fetchError) {
-				console.error(
-					"Error fetching user messages:",
-					fetchError.message
-				);
+				toast.error("Error fetching user messages:");
 			} else {
 				setMessages(userMessages || []);
 			}
 
-			// ✅ New extended logic
+			setLoading(false);
+		};
+
+		fetchData();
+	}, []);
+
+	// ✅ Secret Page 2 inherited Logic
+	const handleSaveMessage = async () => {
+		if (!user) return;
+
+		const messageToSave = {
+			user_id: user.id,
+			message: newMessage,
+			updated_at: new Date().toISOString(),
+		};
+
+		try {
+			let result;
+
+			if (editingMessageId) {
+				result = await updateMessage(newMessage, editingMessageId);
+				toast.success("Secret message updated!");
+			} else {
+				result = await createMessage(messageToSave);
+				toast.success("Secret message saved!");
+			}
+
+			if (result.error) {
+				toast.error("Something went wrong!");
+			}
+		} catch (error: any) {
+			toast.error("Failed to save message. Please try again.");
+		} finally {
+			setTimeout(() => {
+				location.reload();
+			}, 1500);
+		}
+	};
+
+	const handleEditMessage = (id: string, text: string) => {
+		setEditingMessageId(id);
+		setNewMessage(text);
+	};
+
+	const handleDeleteMessage = async () => {
+		if (!messageToDeleteId) return;
+
+		try {
+			const { error } = await api.deleteMessage(messageToDeleteId);
+
+			if (error) {
+				toast.error("Something went Wrong!");
+			}
+
+			toast.success("Message deleted!");
+		} catch (err: any) {
+			toast.error("Failed to delete message.");
+		} finally {
+			setShowDeleteModal(false);
+			setMessageToDeleteId(null);
+			setTimeout(() => {
+				location.reload();
+			}, 1500);
+		}
+	};
+
+	const confirmDelete = (id: string) => {
+		setMessageToDeleteId(id);
+		setShowDeleteModal(true);
+	};
+
+	// ✅ Added Logic
+	useEffect(() => {
+		const fetchData = async () => {
 			const {
 				data: { session },
 			} = await supabase.auth.getSession();
 
 			if (!session?.user) {
-				alert("Unauthorized");
+				toast.error("Unauthorized");
 				return;
 			}
 
@@ -129,7 +209,6 @@ export default function SecretPage3() {
 				};
 			});
 
-			// setMessages(userMessage || []);
 			setUsers(nonFriends || []);
 			setFriends(
 				allUsers?.filter((u) => friendIds?.includes(u.id)) || []
@@ -143,61 +222,70 @@ export default function SecretPage3() {
 		fetchData();
 	}, []);
 
+	useEffect(() => {
+		if (error) throw error;
+	}, [error]);
+
 	const sendRequest = async (receiver_id: string) => {
 		if (!currentUser) return;
 
-		// Update button text state immediately
+		// Optimistically update UI
 		const updatedUsers = users.map((user) =>
-			user.id === receiver_id
-				? { ...user, requestSent: true } // Mark that request is sent
-				: user
+			user.id === receiver_id ? { ...user, requestSent: true } : user
 		);
 		setUsers(updatedUsers);
 
-		const { error } = await api.sentRequest({
-			sender_id: currentUser.id,
-			receiver_id: receiver_id,
-		});
+		try {
+			const { error } = await api.sentRequest({
+				sender_id: currentUser.id,
+				receiver_id: receiver_id,
+			});
 
-		if (error) {
-			alert("Error sending request");
-			console.error(error.message);
-		} else {
-			alert("Friend request sent!");
-			// We do NOT reload, just update the button state
+			if (error) throw new Error(error.message);
+
+			toast.success("Friend request sent!");
+		} catch (err: any) {
+			toast.error("Failed to send friend request.");
 		}
 	};
 
 	const cancelRequest = async (receiver_id: string) => {
 		if (!currentUser) return;
 
-		// Find the request sent by the current user to the receiver
-		const { data: sentRequests } = await api.cancelRequest({
-			currentUserId: currentUser.id,
-			receiver_id: receiver_id,
-		});
+		try {
+			// Find the request sent by the current user to the receiver
+			const { data: sentRequests, error: fetchError } =
+				await api.cancelRequest({
+					currentUserId: currentUser.id,
+					receiver_id: receiver_id,
+				});
 
-		if (sentRequests && sentRequests.length > 0) {
-			const requestId = sentRequests[0].id;
+			if (fetchError) throw new Error(fetchError.message);
 
-			// Delete the request from the database
-			const { error } = await api.deleteRequest(requestId);
+			if (sentRequests && sentRequests.length > 0) {
+				const requestId = sentRequests[0].id;
 
-			if (error) {
-				alert("Error canceling request");
-				console.error(error.message);
-			} else {
-				alert("Friend request canceled!");
+				// Delete the request from the database
+				const { error: deleteError } = await api.deleteRequest(
+					requestId
+				);
+
+				if (deleteError) throw new Error(deleteError.message);
+
+				toast.success("Friend request canceled!");
+
 				// Update the UI
 				const updatedUsers = users.map((user) =>
 					user.id === receiver_id
-						? { ...user, requestSent: false } // Mark that the request was canceled
+						? { ...user, requestSent: false }
 						: user
 				);
-
 				setUsers(updatedUsers);
-				location.reload();
+			} else {
+				toast.error("No request found to cancel.");
 			}
+		} catch (err: any) {
+			toast.error("Failed to cancel friend request.");
 		}
 	};
 
@@ -205,107 +293,62 @@ export default function SecretPage3() {
 		id: string,
 		status: "accepted" | "rejected"
 	) => {
-		if (status === "accepted") {
-			const { error } = await api.acceptRequest({
-				status: status,
-				id: id,
-			});
+		try {
+			if (status === "accepted") {
+				const { error } = await api.acceptRequest({ status, id });
 
-			if (error) {
-				alert("Error accepting request");
-				console.error(error.message);
-			} else {
-				alert("Request accepted");
-				location.reload();
-			}
-		} else if (status === "rejected") {
-			const { error } = await api.rejectRequest(id);
+				if (error) throw new Error(error.message);
 
-			if (error) {
-				alert("Error rejecting request");
-				console.error(error.message);
+				toast.success("Friend request accepted!");
 			} else {
-				alert("Request rejected and deleted");
-				location.reload();
+				const { error } = await api.rejectRequest(id);
+
+				if (error) throw new Error(error.message);
+
+				toast.success("Friend request rejected and deleted.");
 			}
+
+			setTimeout(() => {
+				location.reload();
+			}, 1500);
+		} catch (err: any) {
+			toast.error("Something went wrong. Please try again.");
 		}
+	};
+
+	const cancelViewFriendMessage = () => {
+		setIsMyMessage(true);
 	};
 
 	const viewMessages = async (friendId: string) => {
 		if (!currentUser) {
-			console.warn("⚠️ No current user.");
+			toast.error("You must be logged in to view messages.");
 			return;
 		}
 
 		const isFriend = friends.some((friend) => friend.id === friendId);
 
 		if (!isFriend) {
-			// Throw 403 and redirect to custom page
-			router.push("/403-forbidden"); // 👈 Make sure this route exists
-			throw new Error("403: Forbidden - Not a friend");
+			const error = new Error("You are not friends with this person.");
+			error.name = "403 Forbidden";
+			setError(error);
+			return;
 		}
 
 		try {
 			const { data, error } = await api.getMessageById(friendId);
 
 			if (error) {
-				console.error("❌ Supabase Fetch Error:", error);
+				toast.error("Failed to fetch messages.");
 				return;
 			}
 
 			setFriendMessages(data || []);
 			setIsMyMessage(false);
-		} catch (err) {
-			console.error("🚨 Unexpected Error:", err);
+			toast.success("Messages loaded!");
+		} catch (err: any) {
+			throw err;
 		}
-	};
-
-	const handleSaveMessage = async () => {
-		if (!currentUser) return;
-
-		const messageToSave = {
-			user_id: currentUser.id,
-			message: newMessage,
-			updated_at: new Date().toISOString(),
-		};
-
-		let saveError;
-
-		if (editingMessageId) {
-			const { error } = await updateMessage(newMessage, editingMessageId);
-			saveError = error;
-		} else {
-			const { error } = await createMessage(messageToSave);
-			saveError = error;
-		}
-
-		if (saveError) {
-			console.error("Error saving message:", saveError.message);
-		} else {
-			alert("Secret message saved!");
-			location.reload(); // consider using re-fetch instead
-		}
-	};
-
-	const handleEditMessage = (id: string, text: string) => {
-		setEditingMessageId(id);
-		setNewMessage(text);
-	};
-
-	const handleDeleteMessage = async (id: string) => {
-		if (confirm("Are you sure you want to delete this message?")) {
-			const { error } = await api.deleteMessage(id);
-			if (error) {
-				console.error("Delete error:", error.message);
-			} else {
-				alert("Message deleted");
-				location.reload(); // consider using re-fetch instead
-			}
-		}
-	};
-
-	const cancelViewFriendMessage = () => {
-		setIsMyMessage(true);
 	};
 
 	if (loading) return <Loading loading={loading} />;
@@ -315,6 +358,7 @@ export default function SecretPage3() {
 			<h1 className="text-2xl font-bold mb-4">
 				👋 Hello, {user?.user_metadata?.full_name}
 			</h1>
+
 			<Messages
 				messages={isMyMessage ? messages : friendMessages}
 				title={
@@ -333,9 +377,16 @@ export default function SecretPage3() {
 				setEditingMessageId={setEditingMessageId}
 				handleSaveMessage={handleSaveMessage}
 				handleEditMessage={handleEditMessage}
-				handleDeleteMessage={handleDeleteMessage}
+				handleDeleteMessage={confirmDelete}
 				disabled={!isMyMessage}
 				onGoBack={cancelViewFriendMessage}
+			/>
+			<ConfirmationDeleteModal
+				title="delete"
+				text="Are you sure you want to delete this message?"
+				isOpen={showDeleteModal}
+				onClose={() => setShowDeleteModal(false)}
+				onConfirm={handleDeleteMessage}
 			/>
 
 			<Social

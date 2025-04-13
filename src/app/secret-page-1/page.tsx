@@ -6,6 +6,7 @@ import { User } from "@supabase/supabase-js";
 import Messages from "@/components/Messages";
 import Loading from "@/helper/Loading";
 import api from "@/api/api";
+import toast from "react-hot-toast";
 
 export default function SecretPage1() {
 	const [user, setUser] = useState<User | null>(null);
@@ -18,7 +19,7 @@ export default function SecretPage1() {
 				await supabase.auth.getUser();
 
 			if (authError || !authData?.user) {
-				console.error("No authenticated user found.");
+				toast.error("No authenticated user found.");
 				setLoading(false);
 				return;
 			}
@@ -30,10 +31,7 @@ export default function SecretPage1() {
 				await api.getMessageById(currentUser.id);
 
 			if (fetchError) {
-				console.error(
-					"Error fetching user messages:",
-					fetchError.message
-				);
+				toast.error("Error fetching user messages:");
 			} else {
 				setMessages(userMessages || []);
 			}
@@ -50,7 +48,6 @@ export default function SecretPage1() {
 			<h1 className="text-2xl font-bold mb-4">
 				👋 Hello, {user?.user_metadata?.full_name}
 			</h1>
-			{/* User Messages */}
 			<Messages messages={messages} />
 		</div>
 	);

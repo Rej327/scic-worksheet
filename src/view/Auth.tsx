@@ -3,6 +3,7 @@
 import { supabase } from "@/helper/connection";
 import { SupabaseClient } from "@supabase/supabase-js";
 import React, { useState } from "react";
+import toast from "react-hot-toast";
 
 interface DashboardProps {
 	supabase: SupabaseClient;
@@ -28,11 +29,11 @@ export default function Auth({ supabase }: DashboardProps) {
 			});
 
 			if (error) {
-				console.error("Registration error:", error.message);
+				toast.error("Registration error");
 				return;
 			}
 
-			console.log("User registered successfully.");
+			toast.success("User registered successfully.");
 		} else {
 			await supabase.auth.signInWithPassword({
 				email,

@@ -1,3 +1,11 @@
+export interface ConfirmationModalProps {
+	text: string;
+	title: string;
+	isOpen: boolean;
+	onClose: () => void;
+	onConfirm: () => void;
+}
+
 export interface CreateMessageProps {
 	user_id: string;
 	message: string;
