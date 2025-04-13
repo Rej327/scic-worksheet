@@ -11,7 +11,7 @@ export const acceptRequest = async ({ status, id }: FriendRequestProps) => {
 };
 
 export const rejectRequest = async (id: string) => {
-	const result = await supabase.from("friend_request").delete().eq("id", id);
+	const result = await supabase.from("friend_status").delete().eq("id", id);
 
 	return result;
 };
