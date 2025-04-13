@@ -68,6 +68,7 @@ export default function Auth({ supabase }: DashboardProps) {
 
 			if (error) {
 				toast.error(error.message || "Login failed");
+				setLoading(false);
 				return;
 			}
 

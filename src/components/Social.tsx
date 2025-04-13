@@ -102,7 +102,7 @@ const Social: React.FC<Props> = ({
 	);
 
 	return (
-		<div className="w-[40vw]">
+		<div className="w-auto md:w-[40vw]">
 			{/* People You May Know */}
 			<section>
 				{users.length === 0 ? null : (

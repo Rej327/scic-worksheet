@@ -32,7 +32,7 @@ export default function OverwriteMessages({
 	onGoBack,
 }: OverwriteMessagesProps) {
 	return (
-		<div className="fixed top-0 right-0 w-full md:w-1/3 lg:w-1/4 h-full p-5">
+		<div className="md:fixed md:top-0 md:right-0 w-full md:w-1/3 lg:w-1/4 h-full p-2 md:p-5">
 			<div className="relative h-full w-full">
 				{/* Blurred content wrapper */}
 				<div
