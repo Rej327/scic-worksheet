@@ -1,3 +1,8 @@
+export interface Message {
+	id: string;
+	message: string;
+}
+
 export interface ConfirmationModalProps {
 	text: string;
 	title: string;

@@ -4,7 +4,7 @@ import { FaRegClock } from "react-icons/fa";
 interface Message {
 	id: string;
 	message: string;
-	updated_at?: string; // make it optional if it's not always present
+	updated_at?: string;
 }
 
 interface MessagesProps {

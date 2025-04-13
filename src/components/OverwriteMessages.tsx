@@ -1,9 +1,5 @@
+import { Message } from "@/types/types";
 import React from "react";
-
-interface Message {
-	id: string;
-	message: string;
-}
 
 interface OverwriteMessagesProps {
 	message: Message[];
