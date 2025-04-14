@@ -106,6 +106,10 @@ export default function Auth({ supabase }: DashboardProps) {
 					)}
 
 					<div>
+						<p className="text-red-500 font-semibold text-sm mt-1">
+							Note: Email Confirmation is Off in supabase for
+							testing
+						</p>
 						<input
 							data-testid="email"
 							className="border-[1px] border-gray-300 p-2 w-full rounded"
