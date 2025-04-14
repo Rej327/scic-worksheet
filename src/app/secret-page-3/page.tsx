@@ -308,7 +308,11 @@ export default function SecretPage3() {
 			if (status === "accepted") {
 				const { error } = await api.acceptRequest({ status, id });
 
-				if (error) throw new Error(error.message);
+				if (error) {
+					toast.error(
+						"Failed to accept. Please try again or reload the page."
+					);
+				}
 
 				toast.success("Friend request accepted!");
 			} else {
@@ -323,7 +327,9 @@ export default function SecretPage3() {
 				location.reload();
 			}, 1500);
 		} catch (err: any) {
-			toast.error("Something went wrong. Please try again.");
+			toast.error(
+				"Something went wrong. Please try again or reload the page."
+			);
 		}
 	};
 
