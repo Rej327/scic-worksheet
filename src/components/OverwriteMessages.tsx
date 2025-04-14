@@ -67,7 +67,7 @@ export default function OverwriteMessages({
 								messages.map((msg) => (
 									<li
 										key={msg.id}
-										className="flex justify-between items-center p-4 bg-gray-100 rounded-md shadow-sm"
+										className="flex justify-between items-center p-4 bg-[#D5F0CE] rounded-md shadow-sm"
 									>
 										<span className="text-gray-800 break-words w-full mr-4">
 											{msg.message}
@@ -96,7 +96,7 @@ export default function OverwriteMessages({
 									</li>
 								))
 							) : (
-								<li className="p-4 bg-gray-100 rounded-md shadow-sm">
+								<li className="p-4 bg-[#D5F0CE] rounded-md shadow-sm">
 									No messages to edit.
 								</li>
 							)}

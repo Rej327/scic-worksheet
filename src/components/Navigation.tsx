@@ -12,10 +12,11 @@ import {
 	FaSignOutAlt,
 	FaTrashAlt,
 } from "react-icons/fa";
-import { background } from "../../public/assets";
+import { background, scic_logo_white } from "../../public/assets";
 import toast from "react-hot-toast";
 import ConfirmationDeleteModal from "./ConfirmationModal";
 import { NavItemProps } from "@/types/navigation";
+import Image from "next/image";
 
 const NavItem: NavItemProps[] = [
 	{
@@ -140,11 +141,22 @@ export default function Navigation({
 						backgroundPosition: "center",
 					}}
 				>
-					<div className="absolute inset-0 bg-green-800/90 z-0" />
-					<div className="relative z-10">
-						<h1 className="text-xl font-semibold p-4 border-b-2 border-white/20">
-							SCIC Worksheet
-						</h1>
+					<div className="absolute inset-0 bg-green-800/90 z-0 " />
+					<div className="relative z-10 py-4">
+						<div className="flex gap-2 px-4 pb-4 border-b-2 border-white/20">
+							<Image
+								src={scic_logo_white}
+								alt="Logo"
+								width={50}
+								height={50}
+							/>
+							<div>
+								<h1 className="text-xl font-semibold">
+									SCIC Worksheet
+								</h1>
+								<p>Secret Page App</p>
+							</div>
+						</div>
 						<nav className="flex flex-col gap-2 p-4">
 							{NavItem.map((link, i) => (
 								<NavLink
@@ -156,7 +168,7 @@ export default function Navigation({
 							))}
 						</nav>
 					</div>
-					<div className="p-4 border-t border-green-700 space-y-2 relative z-10">
+					<div className="p-4 border-t-1 border-white/20 space-y-2 relative z-10">
 						<button
 							onClick={handleLogoutModal}
 							className="w-full hover:bg-white/20 py-2 px-4 rounded flex items-center justify-start gap-4 cursor-pointer"

@@ -15,7 +15,7 @@ export default function RootLayout({
 }>) {
 	return (
 		<html lang="en">
-			<body className="bg-gray-100 antialiased">
+			<body className="bg-[#D5F0CE] antialiased">
 				<ToastProvider />
 				{children}
 			</body>

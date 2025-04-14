@@ -21,7 +21,7 @@ const Social: React.FC<SocialProps> = ({
 	viewMessages,
 }) => {
 	const MessageList = ({ messages }: { messages: string[] }) => (
-		<div className="bg-gray-100 p-2 rounded">
+		<div className="bg-[#D5F0CE] p-2 rounded">
 			<h4 className="font-semibold">Messages:</h4>
 			<ul className="list-disc ml-4">
 				{messages.map((msg, idx) => (
@@ -139,7 +139,9 @@ const Social: React.FC<SocialProps> = ({
 								className="flex flex-col gap-2 p-2 rounded mb-2"
 							>
 								<div className="flex justify-between gap-2 items-center rounded-md bg-white shadow-md p-5">
-									<span className="capitalize">{req.sender_full_name}</span>
+									<span className="capitalize">
+										{req.sender_full_name}
+									</span>
 									<div className="space-x-1">
 										<div className="flex gap-2">
 											<IconWithTooltip
