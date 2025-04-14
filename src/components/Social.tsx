@@ -5,37 +5,9 @@ import { IoMdPersonAdd } from "react-icons/io";
 import { MdDeleteSweep } from "react-icons/md";
 import { TbCancel } from "react-icons/tb";
 import IconWithTooltip from "./IconWithTooltip";
+import { SocialProps, User } from "@/types/types";
 
-interface User {
-	id: string;
-	full_name: string;
-	requestSent?: boolean;
-}
-
-interface Request {
-	id: string;
-	sender_full_name: string;
-	receiver_full_name: string;
-	receiver_id: string;
-}
-
-interface Props {
-	users: User[];
-	sentRequests: Request[];
-	requests: Request[];
-	friends: User[];
-	viewedMessages: Record<string, string[]>;
-	viewingError: string | null;
-	sendRequest: (userId: string) => void;
-	cancelRequest: (userId: string) => void;
-	respondToRequest: (
-		requestId: string,
-		action: "accepted" | "rejected"
-	) => void;
-	viewMessages: (userId: string) => void;
-}
-
-const Social: React.FC<Props> = ({
+const Social: React.FC<SocialProps> = ({
 	users,
 	sentRequests,
 	requests,

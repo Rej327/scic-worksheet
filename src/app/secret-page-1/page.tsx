@@ -48,6 +48,7 @@ export default function SecretPage1() {
 			<h1 className="text-2xl font-bold mb-4">
 				👋 Hello, {user?.user_metadata?.full_name}
 			</h1>
+			{/* View Message */}
 			<Messages messages={messages} />
 		</div>
 	);

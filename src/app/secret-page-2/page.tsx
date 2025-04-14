@@ -90,11 +90,13 @@ export default function SecretPage2() {
 		}
 	};
 
+	//Setter to edit Message
 	const handleEditMessage = (id: string, text: string) => {
 		setEditingMessageId(id);
 		setNewMessage(text);
 	};
 
+	//Delete message function
 	const handleDeleteMessage = async () => {
 		if (!messageToDeleteId) return;
 
@@ -117,6 +119,7 @@ export default function SecretPage2() {
 		}
 	};
 
+	//Setter to delete message (Show Modal)
 	const confirmDelete = (id: string) => {
 		setMessageToDeleteId(id);
 		setShowDeleteModal(true);
@@ -130,8 +133,10 @@ export default function SecretPage2() {
 				👋 Hello, {user?.user_metadata?.full_name}
 			</h1>
 
+			{/* View Message */}
 			<Messages messages={messages} />
 
+			{/* View Overwrite Message */}
 			<OverwriteMessages
 				message={messages}
 				newMessage={newMessage}
@@ -144,6 +149,7 @@ export default function SecretPage2() {
 				handleDeleteMessage={confirmDelete}
 			/>
 
+			{/* View confirmation modal */}
 			<ConfirmationDeleteModal
 				title="delete"
 				text="Are you sure you want to delete this message?"

@@ -108,11 +108,13 @@ export default function SecretPage3() {
 		}
 	};
 
+	//Setter to edit Message
 	const handleEditMessage = (id: string, text: string) => {
 		setEditingMessageId(id);
 		setNewMessage(text);
 	};
 
+	//Delete message function
 	const handleDeleteMessage = async () => {
 		if (!messageToDeleteId) return;
 
@@ -135,6 +137,7 @@ export default function SecretPage3() {
 		}
 	};
 
+	//Setter to delete message (Show Modal)
 	const confirmDelete = (id: string) => {
 		setMessageToDeleteId(id);
 		setShowDeleteModal(true);
@@ -222,10 +225,12 @@ export default function SecretPage3() {
 		fetchData();
 	}, []);
 
+	//Redirect error page when error is true
 	useEffect(() => {
 		if (error) throw error;
 	}, [error]);
 
+	//Send friend request
 	const sendRequest = async (receiver_id: string) => {
 		if (!currentUser) return;
 
@@ -249,11 +254,11 @@ export default function SecretPage3() {
 		}
 	};
 
+	//Cancel friend request and delete in the table
 	const cancelRequest = async (receiver_id: string) => {
 		if (!currentUser) return;
 
 		try {
-			// Find the request sent by the current user to the receiver
 			const { data: sentRequests, error: fetchError } =
 				await api.cancelRequest({
 					currentUserId: currentUser.id,
@@ -265,7 +270,6 @@ export default function SecretPage3() {
 			if (sentRequests && sentRequests.length > 0) {
 				const requestId = sentRequests[0].id;
 
-				// Delete the request from the database
 				const { error: deleteError } = await api.deleteRequest(
 					requestId
 				);
@@ -316,10 +320,12 @@ export default function SecretPage3() {
 		}
 	};
 
+	//Blur the input sections when viewing friend secret message
 	const cancelViewFriendMessage = () => {
 		setIsMyMessage(true);
 	};
 
+	//Viewing friend secret messages
 	const viewMessages = async (friendId: string) => {
 		if (!currentUser) {
 			toast.error("You must be logged in to view messages.");
@@ -359,6 +365,7 @@ export default function SecretPage3() {
 				👋 Hello, {user?.user_metadata?.full_name}
 			</h1>
 
+			{/* View Message */}
 			<Messages
 				messages={isMyMessage ? messages : friendMessages}
 				title={
@@ -368,6 +375,7 @@ export default function SecretPage3() {
 				}
 			/>
 
+			{/* View Overwrite Message */}
 			<OverwriteMessages
 				message={messages}
 				newMessage={newMessage}
@@ -381,6 +389,8 @@ export default function SecretPage3() {
 				disabled={!isMyMessage}
 				onGoBack={cancelViewFriendMessage}
 			/>
+
+			{/* View confirmation modal */}
 			<ConfirmationDeleteModal
 				title="delete"
 				text="Are you sure you want to delete this message?"
@@ -389,6 +399,7 @@ export default function SecretPage3() {
 				onConfirm={handleDeleteMessage}
 			/>
 
+			{/* View friend list, request and friend secret messages */}
 			<Social
 				users={users}
 				sentRequests={sentRequests}

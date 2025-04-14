@@ -1,6 +1,6 @@
 "use client";
 
-import React, { ReactNode, useState } from "react";
+import React, { useState } from "react";
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 import { supabase } from "@/helper/connection";
@@ -15,12 +15,7 @@ import {
 import { background } from "../../public/assets";
 import toast from "react-hot-toast";
 import ConfirmationDeleteModal from "./ConfirmationModal";
-
-interface NavItemProps {
-	href: string;
-	label: string;
-	icon: ReactNode;
-}
+import { NavItemProps } from "@/types/types";
 
 const NavItem: NavItemProps[] = [
 	{
@@ -147,9 +142,9 @@ export default function Navigation({
 				>
 					<div className="absolute inset-0 bg-green-800/90 z-0" />
 					<div className="relative z-10">
-						<h2 className="text-2xl font-bold p-4 border-b-2 border-white/20">
+						<h1 className="text-xl font-semibold p-4 border-b-2 border-white/20">
 							SCIC Worksheet
-						</h2>
+						</h1>
 						<nav className="flex flex-col gap-2 p-4">
 							{NavItem.map((link, i) => (
 								<NavLink

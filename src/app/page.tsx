@@ -12,13 +12,13 @@ export default function Home() {
 	const [session, setSession] = useState<any>(null);
 	const [loading, setLoading] = useState(true);
 
-	// Save profile to Supabase table
+	//Save profile to Supabase table (profiles)
 	const saveProfile = async (user: any) => {
 		const userId = user.id;
 		const fullName = user.user_metadata?.full_name || "";
 
 		const { error } = await supabase
-			.from("profile")
+			.from("profiles")
 			.upsert({ id: userId, full_name: fullName });
 
 		if (error) {
@@ -46,7 +46,7 @@ export default function Home() {
 
 		fetchSession();
 
-		// Auth state change listener
+		//Auth state change listener
 		const {
 			data: { subscription },
 		} = supabase.auth.onAuthStateChange(async (event, session) => {

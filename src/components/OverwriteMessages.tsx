@@ -1,19 +1,5 @@
-import { Message } from "@/types/types";
+import { OverwriteMessagesProps } from "@/types/types";
 import React from "react";
-
-interface OverwriteMessagesProps {
-	message: Message[];
-	newMessage: string;
-	editingMessageId: string | null;
-	messages: Message[];
-	setNewMessage: (value: string) => void;
-	setEditingMessageId: (id: string | null) => void;
-	handleSaveMessage: () => void;
-	handleEditMessage: (id: string, message: string) => void;
-	handleDeleteMessage: (id: string) => void;
-	disabled?: boolean;
-	onGoBack?: () => void;
-}
 
 export default function OverwriteMessages({
 	newMessage,
@@ -37,7 +23,9 @@ export default function OverwriteMessages({
 					}`}
 				>
 					<h2 className="text-lg font-semibold mb-3">
-						{editingMessageId ? "Edit Secret Message" : "Write a Secret Message"}
+						{editingMessageId
+							? "Edit Secret Message"
+							: "Write a Secret Message"}
 					</h2>
 
 					<textarea
@@ -52,7 +40,9 @@ export default function OverwriteMessages({
 							className="w-full p-2 bg-blue-500 text-white rounded-md hover:bg-blue-600 cursor-pointer"
 							onClick={handleSaveMessage}
 						>
-							{editingMessageId ? "Update Message" : "Save Message"}
+							{editingMessageId
+								? "Update Message"
+								: "Save Message"}
 						</button>
 						{editingMessageId && (
 							<button
@@ -85,7 +75,10 @@ export default function OverwriteMessages({
 											<button
 												className="cursor-pointer px-3 py-1 bg-yellow-500 text-white rounded-full hover:bg-yellow-600 shadow-sm text-sm"
 												onClick={() =>
-													handleEditMessage(msg.id, msg.message)
+													handleEditMessage(
+														msg.id,
+														msg.message
+													)
 												}
 											>
 												Edit
