@@ -34,7 +34,7 @@ describe.only("OverwriteMessages", () => {
 		).toBeInTheDocument();
 		expect(screen.getByText("Save Message")).toBeInTheDocument();
 		expect(
-			screen.getByText("Tap to Edit Your Previous Messages")
+			screen.getByText("My Messages")
 		).toBeInTheDocument();
 		expect(screen.getByText("First secret message")).toBeInTheDocument();
 		expect(screen.getByText("Second secret message")).toBeInTheDocument();
