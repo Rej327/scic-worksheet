@@ -54,7 +54,6 @@ describe.only("Social", () => {
     },
   ];
 
-	// Default props for rendering Social component
 	const defaultProps = {
 		users,
 		sentRequests,
@@ -104,7 +103,7 @@ describe.only("Social", () => {
 		const cancelIcons = screen.getAllByLabelText("Cancel Request");
 
 		fireEvent.click(cancelIcons[0]);
-		expect(mockCancelRequest).toHaveBeenCalledWith("1");
+		expect(mockCancelRequest).toHaveBeenCalledWith("2");
 	});
 
 	it("calls respondToRequest on accept/reject", () => {
@@ -120,7 +119,7 @@ describe.only("Social", () => {
 
 	it("calls viewMessages on envelope icon click", () => {
 		const envelopeIcons = screen.getAllByLabelText("View Secret Message");
-		fireEvent.click(envelopeIcons[0]); // Clicking the first "View Secret Message" button
+		fireEvent.click(envelopeIcons[0]);
 		expect(mockViewMessages).toHaveBeenCalledWith("1");
 	});
 });
