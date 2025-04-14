@@ -83,9 +83,9 @@ export default function Auth({ supabase }: DashboardProps) {
 	return (
 		<div className="min-h-screen flex flex-col">
 			{/* Top Section */}
-			<div className="w-full h-[350px] bg-green-950 flex items-center justify-center relative overflow-hidden">
+			<div className="w-full h-[350px] bg-green-950 flex items-center justify-center relative overflow-hidden rounded-b-2xl">
 				<div
-					className="absolute inset-0 opacity-30"
+					className="absolute inset-0 opacity-30 rounded-b-2xl"
 					style={{
 						backgroundImage: `url(${bg_auth.src})`,
 						backgroundSize: "cover",

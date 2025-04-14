@@ -185,7 +185,7 @@ export default function Navigation({
 				</div>
 			</aside>
 
-			<main className="w-full md:ml-[15vw] bg-gray-100 text-gray-900 p-6">
+			<main className="w-full md:ml-[15vw] text-gray-900 p-6">
 				<ConfirmationDeleteModal
 					title={isLogout ? "logout" : "delete"}
 					text={`Are you sure you want ${

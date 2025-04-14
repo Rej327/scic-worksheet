@@ -39,6 +39,7 @@ export default function Home() {
 				}
 			} catch (error) {
 				console.error("Error fetching session:", error);
+				throw new Error();
 			} finally {
 				setLoading(false);
 			}

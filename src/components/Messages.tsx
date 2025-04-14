@@ -14,7 +14,7 @@ export default function Messages({
 			</h1>
 			<div className="w-fit p-2">
 				{messages.length === 0 ? (
-					<div className="text-center text-gray-600 bg-[#D5F0CE] p-4 rounded-md">
+					<div className="text-center text-gray-600 p-4 rounded-md">
 						{emptyText}
 					</div>
 				) : (

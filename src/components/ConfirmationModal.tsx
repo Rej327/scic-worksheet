@@ -24,7 +24,7 @@ export default function ConfirmationDeleteModal({
 	return (
 		<div
 			className={`fixed inset-0 z-50 flex items-center justify-center transition-opacity duration-300 ${
-				visible ? "opacity-100 bg-black/40" : "opacity-0 bg-black/0"
+				visible ? "opacity-100 bg-black/80" : "opacity-0 bg-black/0"
 			}`}
 		>
 			<div
