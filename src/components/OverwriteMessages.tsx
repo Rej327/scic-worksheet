@@ -60,14 +60,14 @@ export default function OverwriteMessages({
 
 					<div className="mt-4">
 						<h3 className="text-md font-semibold mb-2">
-							Tap to Edit Your Previous Messages
+							My Messages
 						</h3>
 						<ul className="space-y-2">
 							{messages.length > 0 ? (
 								messages.map((msg) => (
 									<li
 										key={msg.id}
-										className="flex justify-between items-center p-4 bg-[#D5F0CE] rounded-md shadow-sm"
+										className="flex justify-between items-center p-4 bg-[#d5f0ceb2] rounded-md shadow-sm"
 									>
 										<span className="text-gray-800 break-words w-full mr-4">
 											{msg.message}
