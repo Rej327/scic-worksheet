@@ -73,7 +73,7 @@ export default function Home() {
 	return session ? (
 		<Navigation>
 			<div className="px-4">
-				<h1 className="text-2xl font-bold mb-4 mt-6">
+				<h1 className="capitalize text-2xl font-bold mb-4 mt-6">
 					👋 Hello, {session.user.user_metadata?.full_name}
 				</h1>
 				<Dashboard supabase={supabase} />

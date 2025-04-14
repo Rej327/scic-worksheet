@@ -40,7 +40,7 @@ const Social: React.FC<SocialProps> = ({
 	}) => (
 		<div className="flex flex-col gap-2 p-2 rounded mb-2">
 			<div className="flex justify-between gap-2 items-center rounded-md bg-white shadow-md p-5">
-				<span>{user.full_name}</span>
+				<span className="capitalize">{user.full_name}</span>
 				<div className="flex gap-4">
 					<IconWithTooltip
 						text="View Secret Message"
@@ -139,7 +139,7 @@ const Social: React.FC<SocialProps> = ({
 								className="flex flex-col gap-2 p-2 rounded mb-2"
 							>
 								<div className="flex justify-between gap-2 items-center rounded-md bg-white shadow-md p-5">
-									<span>{req.sender_full_name}</span>
+									<span className="capitalize">{req.sender_full_name}</span>
 									<div className="space-x-1">
 										<div className="flex gap-2">
 											<IconWithTooltip

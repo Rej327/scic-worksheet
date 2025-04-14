@@ -9,7 +9,7 @@ export default function Messages({
 }: MessagesProps) {
 	return (
 		<div>
-			<h1 className="text-xl font-semibold mb-4 tracking-wider text-[#222222]">
+			<h1 className="capitalize text-xl font-semibold mb-4 tracking-wider text-[#222222]">
 				{title}
 			</h1>
 			<div className="w-fit p-2">
