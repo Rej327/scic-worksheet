@@ -82,8 +82,7 @@ export default function Auth({ supabase }: DashboardProps) {
 
 	return (
 		<div className="min-h-screen flex flex-col">
-			{/* Top Section */}
-			<div className="w-full h-[350px] bg-green-950 flex items-center justify-center relative overflow-hidden rounded-b-2xl">
+			<div className="w-full h-[350px] bg-green-950 flex items-center justify-center relative overflow-hidden rounded-b-2xl shadow-2xl">
 				<div
 					className="absolute inset-0 opacity-30 rounded-b-2xl"
 					style={{
@@ -93,7 +92,7 @@ export default function Auth({ supabase }: DashboardProps) {
 					}}
 				/>
 				<div className="z-10 text-center px-6">
-					<h1 className="text-3xl md:text-5xl font-bold text-white mb-2">
+					<h1 className="text-3xl md:text-5xl font-bold tracking-wider text-white mb-2">
 						SCIC Worksheet
 					</h1>
 					<p className="text-white text-lg md:text-xl">
@@ -102,7 +101,6 @@ export default function Auth({ supabase }: DashboardProps) {
 				</div>
 			</div>
 
-			{/* Form Section */}
 			<div className="flex flex-col items-center justify-center py-10 px-4">
 				<div className="-mt-28 z-100 w-full max-w-md bg-white p-6 rounded-lg shadow-md">
 					<Image
