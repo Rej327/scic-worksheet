@@ -79,7 +79,7 @@ export default function Auth({ supabase }: DashboardProps) {
 	return (
 		<div className="flex flex-col items-center justify-center h-screen">
 			<h1 className="my-4 text-2xl font-semibold tracking-wider">
-				SCIC Worksheet
+				SCIC Worksheet - Secret Page App
 			</h1>
 			<div className="p-6 min-w-md bg-white rounded shadow">
 				<h2 className="text-lg font-semibold mb-4 text-center">
