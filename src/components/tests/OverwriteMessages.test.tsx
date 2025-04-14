@@ -50,12 +50,20 @@ describe.only("OverwriteMessages", () => {
 		expect(defaultProps.setNewMessage).toHaveBeenCalledWith("New text");
 	});
 
-	test("calls handleSaveMessage when Save/Update button is clicked", () => {
-		render(<OverwriteMessages {...defaultProps} />);
+	test("calls handleSaveMessage when Save button is clicked", () => {
+		render(
+			<OverwriteMessages {...defaultProps} newMessage="Some message" />
+		);
 		const saveButton = screen.getByText("Save Message");
 
 		fireEvent.click(saveButton);
 		expect(defaultProps.handleSaveMessage).toHaveBeenCalled();
+	});
+
+	test("disables Save button when newMessage is empty", () => {
+		render(<OverwriteMessages {...defaultProps} newMessage="" />);
+		const saveButton = screen.getByText("Save Message");
+		expect(saveButton).toBeDisabled();
 	});
 
 	test("renders Update Message and Cancel buttons when editing", () => {
