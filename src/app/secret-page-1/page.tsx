@@ -7,10 +7,11 @@ import Messages from "@/components/Messages";
 import Loading from "@/helper/Loading";
 import api from "@/api/api";
 import toast from "react-hot-toast";
+import { MessageProps } from "@/types/message";
 
 export default function SecretPage1() {
 	const [user, setUser] = useState<User | null>(null);
-	const [messages, setMessages] = useState<any[]>([]);
+	const [messages, setMessages] = useState<MessageProps[]>([]);
 	const [loading, setLoading] = useState(true);
 
 	useEffect(() => {
@@ -33,6 +34,8 @@ export default function SecretPage1() {
 			if (fetchError) {
 				toast.error("Error fetching user messages:");
 			} else {
+				console.log(userMessages);
+
 				setMessages(userMessages || []);
 			}
 

@@ -1,5 +1,5 @@
 import { supabase } from "@/helper/connection";
-import { FindRequestProps, SentRequestProps } from "@/types/types";
+import { FindRequestProps, SentRequestProps } from "@/types/friends";
 
 //Get Friends by receiver_id and sender_id
 export const getFriendsByBothId = async (id: string) => {

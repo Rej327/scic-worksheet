@@ -1,4 +1,4 @@
-import { OverwriteMessagesProps } from "@/types/types";
+import { OverwriteMessagesProps } from "@/types/message";
 import React from "react";
 
 export default function OverwriteMessages({

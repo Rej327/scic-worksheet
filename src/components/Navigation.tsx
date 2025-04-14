@@ -15,7 +15,7 @@ import {
 import { background } from "../../public/assets";
 import toast from "react-hot-toast";
 import ConfirmationDeleteModal from "./ConfirmationModal";
-import { NavItemProps } from "@/types/types";
+import { NavItemProps } from "@/types/navigation";
 
 const NavItem: NavItemProps[] = [
 	{

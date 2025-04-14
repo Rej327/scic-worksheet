@@ -1,4 +1,4 @@
-import { ConfirmationModalProps } from "@/types/types";
+import { ConfirmationModalProps } from "@/types/modal";
 import React, { useEffect, useState } from "react";
 
 export default function ConfirmationDeleteModal({

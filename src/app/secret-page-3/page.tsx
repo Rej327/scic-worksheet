@@ -8,15 +8,16 @@ import OverwriteMessages from "@/components/OverwriteMessages";
 import Social from "@/components/Social";
 import { supabase } from "@/helper/connection";
 import Loading from "@/helper/Loading";
+import { FriendRequestStatusProps } from "@/types/friends";
+import { MessageProps } from "@/types/message";
 import { User } from "@supabase/supabase-js";
-import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import toast from "react-hot-toast";
 
 export default function SecretPage3() {
 	// ✅ Secret Page 1 inherited State
 	const [user, setUser] = useState<User | null>(null);
-	const [messages, setMessages] = useState<any[]>([]);
+	const [messages, setMessages] = useState<MessageProps[]>([]);
 	const [loading, setLoading] = useState(true);
 
 	// ✅ Secret Page 2 inherited Logic
@@ -32,18 +33,23 @@ export default function SecretPage3() {
 	// ✅ Added State
 	const [currentUser, setCurrentUser] = useState<any>(null);
 	const [users, setUsers] = useState<any[]>([]);
-	const [friends, setFriends] = useState<any[]>([]);
-	const [requests, setRequests] = useState<any[]>([]);
-	const [sentRequests, setSentRequests] = useState<any[]>([]);
+	const [friendData, setFriendData] = useState<{
+		friends: FriendRequestStatusProps[];
+		requests: FriendRequestStatusProps[];
+		sentRequests: FriendRequestStatusProps[];
+	}>({
+		friends: [],
+		requests: [],
+		sentRequests: [],
+	});
+	[];
 	const [viewedMessages, setViewedMessages] = useState<{
 		[key: string]: string[];
 	}>({});
 	const [viewingError, setViewingError] = useState<string | null>(null);
-	const [friendMessages, setFriendMessages] = useState<any[]>([]);
+	const [friendMessages, setFriendMessages] = useState<MessageProps[]>([]);
 	const [isMyMessage, setIsMyMessage] = useState<boolean>(true);
 	const [error, setError] = useState<Error | null>(null);
-
-	const router = useRouter();
 
 	// ✅ Secret Page 1 inherited Logic
 	useEffect(() => {
@@ -213,11 +219,12 @@ export default function SecretPage3() {
 			});
 
 			setUsers(nonFriends || []);
-			setFriends(
-				allUsers?.filter((u) => friendIds?.includes(u.id)) || []
-			);
-			setRequests(enrichedRequests || []);
-			setSentRequests(enrichedSentRequests || []);
+			setFriendData({
+				friends:
+					allUsers?.filter((u) => friendIds?.includes(u.id)) || [],
+				requests: enrichedRequests || [],
+				sentRequests: enrichedSentRequests || [],
+			});
 
 			setLoading(false);
 		};
@@ -332,7 +339,9 @@ export default function SecretPage3() {
 			return;
 		}
 
-		const isFriend = friends.some((friend) => friend.id === friendId);
+		const isFriend = friendData.friends.some(
+			(friend) => friend.id === friendId
+		);
 
 		if (!isFriend) {
 			const error = new Error("You are not friends with this person.");
@@ -402,9 +411,9 @@ export default function SecretPage3() {
 			{/* View friend list, request and friend secret messages */}
 			<Social
 				users={users}
-				sentRequests={sentRequests}
-				requests={requests}
-				friends={friends}
+				sentRequests={friendData.sentRequests}
+				requests={friendData.requests}
+				friends={friendData.friends}
 				viewedMessages={viewedMessages}
 				viewingError={viewingError}
 				sendRequest={sendRequest}

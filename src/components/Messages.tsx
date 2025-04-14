@@ -1,17 +1,6 @@
+import { MessagesProps } from "@/types/message";
 import React from "react";
 import { FaRegClock } from "react-icons/fa";
-
-interface Message {
-	id: string;
-	message: string;
-	updated_at?: string;
-}
-
-interface MessagesProps {
-	messages: Message[];
-	title?: string;
-	emptyText?: string;
-}
 
 export default function Messages({
 	messages,

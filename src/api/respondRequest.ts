@@ -1,5 +1,5 @@
 import { supabase } from "@/helper/connection";
-import { FriendRequestProps } from "@/types/types";
+import { FriendRequestProps } from "@/types/friends";
 
 //Accept friend request
 export const acceptRequest = async ({ status, id }: FriendRequestProps) => {

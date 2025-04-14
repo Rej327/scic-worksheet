@@ -1,5 +1,5 @@
 import { supabase } from "@/helper/connection";
-import { CreateMessageProps } from "@/types/types";
+import { CreateMessageProps } from "@/types/message";
 
 // Get User Secret Message by UUID
 export const getMessageById = async (id: string) => {

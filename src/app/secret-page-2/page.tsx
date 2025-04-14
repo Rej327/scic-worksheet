@@ -10,11 +10,12 @@ import api from "@/api/api";
 import { createMessage, updateMessage } from "@/api/message";
 import toast from "react-hot-toast";
 import ConfirmationDeleteModal from "@/components/ConfirmationModal";
+import { MessageProps } from "@/types/message";
 
 export default function SecretPage2() {
 	// ✅ Secret Page 1 inherited State
 	const [user, setUser] = useState<User | null>(null);
-	const [messages, setMessages] = useState<any[]>([]);
+	const [messages, setMessages] = useState<MessageProps[]>([]);
 	const [loading, setLoading] = useState(true);
 
 	// ✅ Added State

@@ -5,7 +5,8 @@ import { IoMdPersonAdd } from "react-icons/io";
 import { MdDeleteSweep } from "react-icons/md";
 import { TbCancel } from "react-icons/tb";
 import IconWithTooltip from "./IconWithTooltip";
-import { SocialProps, User } from "@/types/types";
+import { SocialProps } from "@/types/social";
+import { User } from "@/types/user";
 
 const Social: React.FC<SocialProps> = ({
 	users,
