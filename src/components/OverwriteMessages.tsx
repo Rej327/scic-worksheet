@@ -37,8 +37,9 @@ export default function OverwriteMessages({
 
 					<div className="flex space-x-2">
 						<button
-							className="w-full p-2 bg-blue-500 text-white rounded-md hover:bg-blue-600 cursor-pointer"
+							className="w-full p-2 bg-blue-500 text-white rounded-md hover:bg-blue-600 disabled:opacity-50 disabled:cursor-not-allowed cursor-pointer"
 							onClick={handleSaveMessage}
+							disabled={!newMessage.trim()}
 						>
 							{editingMessageId
 								? "Update Message"
@@ -46,7 +47,7 @@ export default function OverwriteMessages({
 						</button>
 						{editingMessageId && (
 							<button
-								className="w-full p-2 bg-gray-300 text-gray-800 rounded-md hover:bg-gray-400"
+								className="w-full p-2 bg-gray-300 text-gray-800 rounded-md hover:bg-gray-400 cursor-pointer"
 								onClick={() => {
 									setEditingMessageId(null);
 									setNewMessage("");

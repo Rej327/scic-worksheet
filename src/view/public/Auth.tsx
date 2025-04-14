@@ -82,7 +82,7 @@ export default function Auth({ supabase }: DashboardProps) {
 				SCIC Worksheet
 			</h1>
 			<div className="p-6 min-w-md bg-white rounded shadow">
-				<h2 className="text-xl mb-4 text-center">
+				<h2 className="text-lg font-semibold mb-4 text-center">
 					{isRegistering ? "Create Account" : "Login to Your Account"}
 				</h2>
 
@@ -141,7 +141,7 @@ export default function Auth({ supabase }: DashboardProps) {
 						data-testid="submit-button"
 						type="submit"
 						disabled={loading}
-						className={`flex items-center justify-center gap-2 bg-blue-600 hover:bg-blue-700 text-white p-2 w-full rounded font-medium transition duration-300 ${
+						className={`flex items-center justify-center gap-2 bg-blue-600 hover:bg-blue-700 text-white p-2 w-full rounded font-medium transition duration-300 cursor-pointer ${
 							loading ? "opacity-60 cursor-not-allowed" : ""
 						}`}
 					>
