@@ -12,7 +12,7 @@ export default function Home() {
 	const [session, setSession] = useState<any>(null);
 	const [loading, setLoading] = useState(true);
 
-	//Save profile to Supabase table (profiles)
+	// Save profile to Supabase table (profiles)
 	const saveProfile = async (user: any) => {
 		const userId = user.id;
 		const fullName = user.user_metadata?.full_name || "";
@@ -39,7 +39,6 @@ export default function Home() {
 				}
 			} catch (error) {
 				console.error("Error fetching session:", error);
-				throw new Error();
 			} finally {
 				setLoading(false);
 			}
@@ -47,7 +46,7 @@ export default function Home() {
 
 		fetchSession();
 
-		//Auth state change listener
+		// Auth state change listener
 		const {
 			data: { subscription },
 		} = supabase.auth.onAuthStateChange(async (event, session) => {
@@ -55,14 +54,18 @@ export default function Home() {
 
 			if (event === "SIGNED_IN" && session?.user) {
 				await saveProfile(session.user);
+			} else if (event === "SIGNED_OUT") {
+				setSession(null);
 			}
 		});
 
+		// Cleanup subscription on unmount
 		return () => {
 			subscription.unsubscribe();
 		};
 	}, []);
 
+	// Avoid infinite loading state
 	if (loading) {
 		return (
 			<div className="w-screen h-screen">
@@ -71,6 +74,7 @@ export default function Home() {
 		);
 	}
 
+	// Render UI based on session state
 	return session ? (
 		<Navigation>
 			<div className="px-4">
