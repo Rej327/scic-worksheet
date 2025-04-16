@@ -8,11 +8,27 @@ import Loading from "@/helper/Loading";
 import api from "@/api/api";
 import toast from "react-hot-toast";
 import { MessageProps } from "@/types/message";
+import { useRouter } from "next/navigation";
 
 export default function SecretPage1() {
 	const [user, setUser] = useState<User | null>(null);
 	const [messages, setMessages] = useState<MessageProps[]>([]);
 	const [loading, setLoading] = useState(true);
+	const router = useRouter();
+
+	useEffect(() => {
+		setLoading(true);
+		const checkUser = async () => {
+			const { data, error } = await supabase.auth.getUser();
+
+			if (error || !data.user) {
+				router.push("/");
+			}
+		};
+
+		checkUser();
+		setLoading(false);
+	}, [router]);
 
 	useEffect(() => {
 		const fetchData = async () => {

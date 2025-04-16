@@ -11,6 +11,7 @@ import { createMessage, updateMessage } from "@/api/message";
 import toast from "react-hot-toast";
 import ConfirmationDeleteModal from "@/components/ConfirmationModal";
 import { MessageProps } from "@/types/message";
+import { useRouter } from "next/navigation";
 
 export default function SecretPage2() {
 	// ✅ Secret Page 1 inherited State
@@ -28,7 +29,23 @@ export default function SecretPage2() {
 		null
 	);
 
+	const router = useRouter();
+
 	// ✅ Secret Page 1 inherited Logic
+	useEffect(() => {
+		setLoading(true);
+		const checkUser = async () => {
+			const { data, error } = await supabase.auth.getUser();
+
+			if (error || !data.user) {
+				router.push("/");
+			}
+		};
+
+		checkUser();
+		setLoading(false);
+	}, [router]);
+
 	useEffect(() => {
 		const fetchData = async () => {
 			try {
@@ -68,7 +85,6 @@ export default function SecretPage2() {
 
 		fetchData();
 	}, []);
-
 
 	// ✅ Added Logic
 	const handleSaveMessage = async () => {

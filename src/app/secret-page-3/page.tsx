@@ -11,6 +11,7 @@ import Loading from "@/helper/Loading";
 import { FriendRequestStatusProps } from "@/types/friends";
 import { MessageProps } from "@/types/message";
 import { User } from "@supabase/supabase-js";
+import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import toast from "react-hot-toast";
 
@@ -50,8 +51,23 @@ export default function SecretPage3() {
 	const [friendMessages, setFriendMessages] = useState<MessageProps[]>([]);
 	const [isMyMessage, setIsMyMessage] = useState<boolean>(true);
 	const [error, setError] = useState<Error | null>(null);
+	const router = useRouter();
 
 	// ✅ Secret Page 1 inherited Logic
+	useEffect(() => {
+		setLoading(true);
+		const checkUser = async () => {
+			const { data, error } = await supabase.auth.getUser();
+
+			if (error || !data.user) {
+				router.push("/");
+			}
+		};
+
+		checkUser();
+		setLoading(false);
+	}, [router]);
+
 	useEffect(() => {
 		const fetchData = async () => {
 			try {
