@@ -1,34 +1,10 @@
 "use client";
 
-import Loading from "@/helper/Loading";
-import { SupabaseClient, User } from "@supabase/supabase-js";
 import Link from "next/link";
 import React, { useEffect, useState } from "react";
 import { FaEdit, FaEnvelope, FaUsers } from "react-icons/fa";
 
-interface DashboardProps {
-	supabase: SupabaseClient;
-}
-
-export default function Dashboard({ supabase }: DashboardProps) {
-	const [user, setUser] = useState<User | null>(null);
-	const [loading, setLoading] = useState(false);
-
-	useEffect(() => {
-		const fetchUser = async () => {
-			const { data, error } = await supabase.auth.getUser();
-			if (error) {
-				console.error("Error fetching user:", error.message);
-			} else {
-				setUser(data.user);
-			}
-		};
-
-		fetchUser();
-	}, [supabase]);
-
-	if (loading) return <Loading loading={loading} />;
-
+export default function Dashboard() {
 	const secretPages = [
 		{ id: "1", title: "Messages", icon: <FaEnvelope size={50} /> },
 		{ id: "2", title: "Overwrite Messages", icon: <FaEdit size={50} /> },

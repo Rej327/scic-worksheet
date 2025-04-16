@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import "./globals.css";
 import { ToastProvider } from "@/components/providers/ToastProvider";
+import { SessionProvider } from "@/context/SessionContext";
 
 export const metadata: Metadata = {
 	title: "SCIC Worksheet - Secret Page App - by Jefferson Resurreccion",
@@ -17,7 +18,7 @@ export default function RootLayout({
 		<html lang="en">
 			<body className="bg-[#D5F0CE] antialiased">
 				<ToastProvider />
-				{children}
+				<SessionProvider>{children}</SessionProvider>
 			</body>
 		</html>
 	);
