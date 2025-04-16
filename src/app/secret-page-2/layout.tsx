@@ -1,34 +1,10 @@
-"use client";
-
-import { useRouter } from "next/navigation";
-import { useEffect, useState } from "react";
-import { supabase } from "@/helper/connection";
-import Loading from "@/helper/Loading";
 import Navigation from "@/components/Navigation";
 
-export default function SecretLayout({
-	children,
-}: {
-	children: React.ReactNode;
-}) {
-	const router = useRouter();
-	const [loading, setLoading] = useState(false);
+export const metadata = {
+	title: "Secret Page 2 | Overwrite",
+	description: "Secret Page App",
+};
 
-	useEffect(() => {
-		const checkUser = async () => {
-			const { data, error } = await supabase.auth.getUser();
-
-			if (error || !data.user) {
-				router.push("/");
-			} else {
-				setLoading(false);
-			}
-		};
-
-		checkUser();
-	}, [router]);
-
-	if (loading) return <Loading loading={loading} />
-
+export default function layout({ children }: { children: React.ReactNode }) {
 	return <Navigation>{children}</Navigation>;
 }

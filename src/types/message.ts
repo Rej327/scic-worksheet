@@ -4,7 +4,7 @@
 // }
 
 export interface MessageProps {
-	id: string;
+	id: string; 
 	message: string;
 	updated_at?: string;
 }
