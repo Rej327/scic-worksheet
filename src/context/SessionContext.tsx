@@ -9,6 +9,7 @@ import {
 } from "react";
 import { supabase } from "@/helper/connection";
 import { getUserById, saveNewUser } from "@/api/user";
+import Loading from "@/helper/Loading";
 
 interface SessionContextType {
 	session: any;
@@ -126,7 +127,11 @@ export const SessionProvider = ({
 	return (
 		<SessionContext.Provider value={{ session, userId, fullName, loading }}>
 			{!loading && children}
-			{loading && <div>Loading...</div>}
+			{loading && (
+				<div className="w-screen h-screen">
+					<Loading loading />
+				</div>
+			)}
 		</SessionContext.Provider>
 	);
 };
