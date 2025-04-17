@@ -154,7 +154,7 @@ export default function SecretPage2() {
 		setShowDeleteModal(true);
 	};
 
-	if (loading) return <Loading loading={loading} />;
+	if (loading) return <p>LOADING PAGE 2</p>;
 
 	return (
 		<div className="w-auto mx-auto p-6 space-y-6">

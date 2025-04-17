@@ -70,7 +70,7 @@ export default function SecretPage1() {
 		fetchData();
 	}, []);
 
-	if (loading) return <Loading loading={loading} />;
+	if (loading) return <p>LOADING PAGE 1</p>;
 	return (
 		<div className="w-auto mx-auto p-6 space-y-6">
 			<h1 className="text-2xl font-bold mb-4">
