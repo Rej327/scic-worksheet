@@ -1,8 +1,7 @@
 import React from "react";
 import "../../public/assets/styles/loading.css";
 
-export default function Loading({ loading }: { loading: boolean }) {
-	if (!loading) return null;
+export default function Loading() {
 
 	return (
 		<div className="w-full h-full flex items-center justify-center">
