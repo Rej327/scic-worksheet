@@ -129,7 +129,7 @@ export const SessionProvider = ({
 			{!loading && children}
 			{loading && (
 				<div className="w-screen h-screen">
-					<Loading />
+					<p>LOADING SESSION</p>
 				</div>
 			)}
 		</SessionContext.Provider>
