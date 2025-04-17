@@ -78,12 +78,11 @@ export const SessionProvider = ({
 				const currentSession = data.session;
 
 				if (!currentSession) {
-					// Redirect to login
-					try {
+					// Redirect to login only if not already on the login page
+					if (window.location.pathname !== "/") {
 						window.location.href = "/";
-					} catch (err) {
-						console.error("Redirect failed:", err);
 					}
+					setLoading(false); // Prevent infinite loading when session is null
 					return;
 				}
 
@@ -104,12 +103,14 @@ export const SessionProvider = ({
 		// Listen for auth state changes
 		const { data: listener } = supabase.auth.onAuthStateChange(
 			async (_event, session) => {
-				console.log("Auth Event:", _event, session); // Debugging
 				setSession(session);
 
-				if (_event === "SIGNED_OUT") {
-					// Redirect on sign out or refresh failure
-					window.location.href = "/";
+				// Redirect to login on logout or token refresh failure
+				if (!_event || _event === "SIGNED_OUT") {
+					if (window.location.pathname !== "/") {
+						window.location.href = "/";
+					}
+					return;
 				}
 
 				if (session?.user) {
@@ -124,7 +125,8 @@ export const SessionProvider = ({
 
 	return (
 		<SessionContext.Provider value={{ session, userId, fullName, loading }}>
-			{children}
+			{!loading && children}
+			{loading && <div>Loading...</div>}
 		</SessionContext.Provider>
 	);
 };
