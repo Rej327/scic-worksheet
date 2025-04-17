@@ -13,10 +13,11 @@ import { useRouter } from "next/navigation";
 export default function SecretPage1() {
 	const [user, setUser] = useState<User | null>(null);
 	const [messages, setMessages] = useState<MessageProps[]>([]);
-	const [loading, setLoading] = useState(true);
+	const [loading, setLoading] = useState(false);
 	const router = useRouter();
 
 	useEffect(() => {
+		setLoading(true);
 		setLoading(true);
 		const checkUser = async () => {
 			const { data, error } = await supabase.auth.getUser();
@@ -31,6 +32,7 @@ export default function SecretPage1() {
 	}, [router]);
 
 	useEffect(() => {
+		setLoading(true);
 		const fetchData = async () => {
 			try {
 				// Fetch user from Supabase
@@ -70,7 +72,7 @@ export default function SecretPage1() {
 		fetchData();
 	}, []);
 
-	if (loading) return <p>LOADING PAGE 1</p>;
+	if (loading) return <Loading />;
 	return (
 		<div className="w-auto mx-auto p-6 space-y-6">
 			<h1 className="text-2xl font-bold mb-4">

@@ -17,7 +17,7 @@ export default function SecretPage2() {
 	// ✅ Secret Page 1 inherited State
 	const [user, setUser] = useState<User | null>(null);
 	const [messages, setMessages] = useState<MessageProps[]>([]);
-	const [loading, setLoading] = useState(true);
+	const [loading, setLoading] = useState(false);
 
 	// ✅ Added State
 	const [newMessage, setNewMessage] = useState<string>("");
@@ -48,6 +48,7 @@ export default function SecretPage2() {
 
 	useEffect(() => {
 		const fetchData = async () => {
+			setLoading(true)
 			try {
 				// Fetch user from Supabase
 				const { data: authData, error: authError } =
@@ -154,7 +155,7 @@ export default function SecretPage2() {
 		setShowDeleteModal(true);
 	};
 
-	if (loading) return <p>LOADING PAGE 2</p>;
+	if (loading) return 	<Loading />;
 
 	return (
 		<div className="w-auto mx-auto p-6 space-y-6">

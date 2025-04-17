@@ -19,7 +19,7 @@ export default function SecretPage3() {
 	// ✅ Secret Page 1 inherited State
 	const [user, setUser] = useState<User | null>(null);
 	const [messages, setMessages] = useState<MessageProps[]>([]);
-	const [loading, setLoading] = useState(true);
+	const [loading, setLoading] = useState(false);
 
 	// ✅ Secret Page 2 inherited Logic
 	const [newMessage, setNewMessage] = useState<string>("");
@@ -70,6 +70,7 @@ export default function SecretPage3() {
 
 	useEffect(() => {
 		const fetchData = async () => {
+			setLoading(true)
 			try {
 				// Fetch user from Supabase
 				const { data: authData, error: authError } =
@@ -179,6 +180,7 @@ export default function SecretPage3() {
 	// ✅ Added Logic
 	useEffect(() => {
 		const fetchData = async () => {
+			setLoading(true)
 			const {
 				data: { session },
 			} = await supabase.auth.getSession();
@@ -399,7 +401,7 @@ export default function SecretPage3() {
 		}
 	};
 
-	if (loading) return <p>LOADING PAGE 3</p>;
+	if (loading) return 	<Loading />;
 
 	return (
 		<div className="w-auto mx-auto p-6 space-y-6">

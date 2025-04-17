@@ -13,7 +13,7 @@ export default function Home() {
 	if (loading) {
 		return (
 			<div className="w-screen h-screen">
-				<p>LOADING MAIN PAGE</p>
+			<Loading />
 			</div>
 		);
 	}
