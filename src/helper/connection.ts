@@ -16,4 +16,9 @@ if (!supabaseUrl) {
 	throw new Error("Missing SUPABASE_URL_KEY in environment variables");
 }
 
-export const supabase = createClient(supabaseUrl, supabaseKey);
+export const supabase = createClient(supabaseUrl, supabaseKey, {
+	auth: {
+		persistSession: true,
+		autoRefreshToken: true,
+	},
+});
