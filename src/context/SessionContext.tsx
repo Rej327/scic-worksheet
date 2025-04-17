@@ -33,7 +33,7 @@ export const SessionProvider = ({
 	const [session, setSession] = useState<any>(null);
 	const [userId, setUserId] = useState<string | null>(null);
 	const [fullName, setFullName] = useState("");
-	const [loading, setLoading] = useState(true);
+	const [loading, setLoading] = useState(false);
 
 	const saveProfile = useCallback(async (user: any) => {
 		const userId = user.id;
@@ -41,7 +41,7 @@ export const SessionProvider = ({
 
 		setFullName(userFullName);
 		setUserId(userId);
-
+		
 		try {
 			// Check if user profile exists
 			const { data, error } = await getUserById(userId);
@@ -68,6 +68,8 @@ export const SessionProvider = ({
 			}
 		} catch (err) {
 			console.error("Error in saveProfile:", err);
+		} finally {
+			setLoading(false);
 		}
 	}, []);
 
