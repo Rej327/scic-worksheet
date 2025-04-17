@@ -10,7 +10,6 @@ import {
 import { supabase } from "@/helper/connection";
 import { getUserById, saveNewUser } from "@/api/user";
 
-
 interface SessionContextType {
 	session: any;
 	userId: string | null;
@@ -78,6 +77,16 @@ export const SessionProvider = ({
 				const { data } = await supabase.auth.getSession();
 				const currentSession = data.session;
 
+				if (!currentSession) {
+					// Redirect to login
+					try {
+						window.location.href = "/";
+					} catch (err) {
+						console.error("Redirect failed:", err);
+					}
+					return;
+				}
+
 				setSession(currentSession);
 				if (currentSession?.user) {
 					await saveProfile(currentSession.user);
@@ -95,7 +104,14 @@ export const SessionProvider = ({
 		// Listen for auth state changes
 		const { data: listener } = supabase.auth.onAuthStateChange(
 			async (_event, session) => {
+				console.log("Auth Event:", _event, session); // Debugging
 				setSession(session);
+
+				if (_event === "SIGNED_OUT") {
+					// Redirect on sign out or refresh failure
+					window.location.href = "/";
+				}
+
 				if (session?.user) {
 					await saveProfile(session.user);
 				}
