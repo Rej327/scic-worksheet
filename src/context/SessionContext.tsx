@@ -35,13 +35,27 @@ export const SessionProvider = ({
 	const [fullName, setFullName] = useState("");
 	const [loading, setLoading] = useState(false);
 
+	useEffect(() => {
+		const handleVisibilityChange = () => {
+			if (document.visibilityState === "visible") {
+				location.reload();
+			}
+		};
+		document.addEventListener("visibilitychange", handleVisibilityChange);
+		return () =>
+			document.removeEventListener(
+				"visibilitychange",
+				handleVisibilityChange
+			);
+	}, []);
+
 	const saveProfile = useCallback(async (user: any) => {
 		const userId = user.id;
 		const userFullName = user.user_metadata?.full_name ?? "";
 
 		setFullName(userFullName);
 		setUserId(userId);
-		
+
 		try {
 			// Check if user profile exists
 			const { data, error } = await getUserById(userId);
@@ -131,7 +145,7 @@ export const SessionProvider = ({
 			{!loading && children}
 			{loading && (
 				<div className="w-screen h-screen">
-					<p>LOADING SESSION</p>
+					<Loading />
 				</div>
 			)}
 		</SessionContext.Provider>
