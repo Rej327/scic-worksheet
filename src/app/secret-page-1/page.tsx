@@ -18,7 +18,6 @@ export default function SecretPage1() {
 
 	useEffect(() => {
 		setLoading(true);
-		setLoading(true);
 		const checkUser = async () => {
 			const { data, error } = await supabase.auth.getUser();
 
