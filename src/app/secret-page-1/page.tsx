@@ -63,12 +63,12 @@ export default function SecretPage1() {
 				console.error("An error occurred:", error);
 				toast.error("Something went wrong while fetching data.");
 			} finally {
-				// Always set loading to false
 				setLoading(false);
 			}
 		};
 
 		fetchData();
+		setLoading(false);
 	}, []);
 
 	if (loading) return <Loading />;
