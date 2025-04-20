@@ -137,7 +137,7 @@ export const SessionProvider = ({
 		);
 
 		// Cleanup listener on unmount
-		return () => listener.subscription.unsubscribe();
+		// return () => listener.subscription.unsubscribe();
 	}, [saveProfile]);
 
 	return (
