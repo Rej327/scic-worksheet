@@ -6,6 +6,7 @@ import toast from "react-hot-toast";
 import { bg_auth, scic_logo } from "../../../public/assets";
 import Image from "next/image";
 import { FaEye, FaEyeSlash } from "react-icons/fa";
+import Loading from "@/helper/Loading";
 
 interface DashboardProps {
 	supabase: SupabaseClient;
@@ -80,6 +81,13 @@ export default function Auth({ supabase }: DashboardProps) {
 		}
 		setLoading(false);
 	};
+
+	if (loading)
+		return (
+			<div className="h-screen w-screen flex items-center justify-center">
+				<Loading />
+			</div>
+		);
 
 	return (
 		<div className="min-h-screen flex flex-col">

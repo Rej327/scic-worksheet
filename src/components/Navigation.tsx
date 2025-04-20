@@ -17,6 +17,7 @@ import toast from "react-hot-toast";
 import ConfirmationDeleteModal from "./ConfirmationModal";
 import { NavItemProps } from "@/types/navigation";
 import Image from "next/image";
+import Loading from "@/helper/Loading";
 
 const NavItem: NavItemProps[] = [
 	{
@@ -101,6 +102,7 @@ export default function Navigation({
 	};
 
 	const handleDelete = async () => {
+		setLoading(true);
 		const { data: userData, error: userError } =
 			await supabase.auth.getUser();
 
@@ -124,17 +126,24 @@ export default function Navigation({
 			}
 
 			await supabase.auth.signOut();
-			location.reload();
+			setLoading(false);
 		} catch (error) {
 			toast.error("Unexpected error during user deletion:");
 		}
 	};
 
+	if (loading)
+		return (
+			<div className="h-screen w-screen flex items-center justify-center">
+				<Loading />
+			</div>
+		);
+
 	return (
 		<div className="flex flex-col md:flex-row min-h-screen">
 			<aside className="w-full md:w-[15vw] md:fixed z-20">
 				<div
-					className="relative h-[400px] md:h-screen text-white flex flex-col justify-between"
+					className="relative h-[450px] md:h-screen text-white flex flex-col justify-between"
 					style={{
 						backgroundImage: `url(${background.src})`,
 						backgroundSize: "cover",
