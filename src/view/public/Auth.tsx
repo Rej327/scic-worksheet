@@ -1,6 +1,5 @@
 "use client";
 
-import { supabase } from "@/helper/connection";
 import { SupabaseClient } from "@supabase/supabase-js";
 import React, { useState } from "react";
 import toast from "react-hot-toast";
