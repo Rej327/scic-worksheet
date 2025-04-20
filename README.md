@@ -16,7 +16,7 @@
 
 ---
 
-This repository contains my submission for the **Sta. Clara Pre-Employment Worksheet Activity**, specifically under **Section 2: Coding – 2.1.1 Secret Page App** of the Trainee Section. The task involves building a simple authentication-based app with interactive secret pages.
+This repository contains my submission for the **Sta. Clara International Corporation Pre-Employment Worksheet Activity**, specifically under **Section 2: Coding – 2.1.1 Secret Page App** of the Trainee Section. The task involves building a simple authentication-based app with interactive secret pages.
 
 ## 🌐 Live Web App
 
