@@ -138,14 +138,22 @@ export default function Auth({ supabase }: DashboardProps) {
 						)}
 
 						<div>
+							<p className="text-right text-xs text-red-800">
+								Note: Email verification is disabled for
+								testing.
+							</p>
 							<input
 								data-testid="email"
-								className="border border-gray-300 p-2 w-full rounded focus:outline-green-600"
+								className={`border border-gray-300 p-2 w-full rounded focus:outline-green-600 ${
+									errors.email && "border-red-500"
+								}`}
 								type="email"
 								placeholder="Email"
 								value={email}
 								onChange={(e) => setEmail(e.target.value)}
+								formNoValidate
 							/>
+
 							{errors.email && (
 								<p className="text-red-500 text-sm mt-1">
 									{errors.email}
@@ -156,7 +164,9 @@ export default function Auth({ supabase }: DashboardProps) {
 						<div>
 							<input
 								data-testid="password"
-								className="border border-gray-300 p-2 w-full rounded focus:outline-green-600"
+								className={`border border-gray-300 p-2 w-full rounded focus:outline-green-600 ${
+									errors.password && "border-red-500"
+								}`}
 								type="password"
 								placeholder="Password"
 								value={password}
