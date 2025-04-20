@@ -60,7 +60,7 @@ Use the following credentials to explore the features:
 
 - ✅ Inherits all features from `secret-page-1`
 - ✅ Users can **add** their own secret message
-- ✅ Users can **overwrite** (edit) their secret message
+- ✅ Users can **overwrite** (CRUD) their secret message
 
 ---
 
