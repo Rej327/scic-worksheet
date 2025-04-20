@@ -160,7 +160,9 @@ export default function SecretPage2() {
 			</h1>
 
 			{/* View Message */}
-			<Messages messages={messages} />
+			<div className="w-auto md:max-w-[40vw] lg:max-w-[55vw]">
+				<Messages messages={messages} />
+			</div>
 
 			{/* View Overwrite Message */}
 			<OverwriteMessages

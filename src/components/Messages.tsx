@@ -8,7 +8,7 @@ export default function Messages({
 	emptyText = "You haven't written any secret messages yet.",
 }: MessagesProps) {
 	return (
-		<div>
+		<div className="relative">
 			<h1 className="capitalize text-xl font-semibold mb-4 tracking-wider text-[#222222]">
 				{title}
 			</h1>

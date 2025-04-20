@@ -70,7 +70,7 @@ export default function SecretPage3() {
 
 	useEffect(() => {
 		const fetchData = async () => {
-			setLoading(true)
+			setLoading(true);
 			try {
 				const { data: authData, error: authError } =
 					await supabase.auth.getUser();
@@ -176,7 +176,7 @@ export default function SecretPage3() {
 	// ✅ Added Logic
 	useEffect(() => {
 		const fetchData = async () => {
-			setLoading(true)
+			setLoading(true);
 			const {
 				data: { session },
 			} = await supabase.auth.getSession();
@@ -397,7 +397,7 @@ export default function SecretPage3() {
 		}
 	};
 
-	if (loading) return 	<Loading />;
+	if (loading) return <Loading />;
 
 	return (
 		<div className="w-auto mx-auto p-6 space-y-6">
@@ -406,14 +406,16 @@ export default function SecretPage3() {
 			</h1>
 
 			{/* View Message */}
-			<Messages
-				messages={isMyMessage ? messages : friendMessages}
-				title={
-					isMyMessage
-						? "Your Secret Messages"
-						: "Friend Secret Messages"
-				}
-			/>
+			<div className="w-auto md:max-w-[40vw] lg:max-w-[55vw]">
+				<Messages
+					messages={isMyMessage ? messages : friendMessages}
+					title={
+						isMyMessage
+							? "Your Secret Messages"
+							: "Friend Secret Messages"
+					}
+				/>
+			</div>
 
 			{/* View Overwrite Message */}
 			<OverwriteMessages

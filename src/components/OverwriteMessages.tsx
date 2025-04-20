@@ -67,12 +67,12 @@ export default function OverwriteMessages({
 								messages.map((msg) => (
 									<li
 										key={msg.id}
-										className="flex justify-between items-center p-4 bg-[#d5f0ceb2] rounded-md shadow-sm"
+										className="flex flex-col md:flex-row justify-between items-center p-4 bg-[#d5f0ceb2] rounded-md shadow-sm"
 									>
 										<span className="text-gray-800 break-words w-full mr-4">
 											{msg.message}
 										</span>
-										<div className="flex space-x-2 shrink-0">
+										<div className="flex mt-4 md:mt-0 self-end md:self-center justify-evenly space-x-2 shrink-0">
 											<button
 												className="cursor-pointer px-3 py-1 bg-yellow-500 text-white rounded-full hover:bg-yellow-600 shadow-sm text-sm"
 												onClick={() =>
