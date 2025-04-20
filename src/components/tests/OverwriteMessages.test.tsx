@@ -25,7 +25,7 @@ describe.only("OverwriteMessages", () => {
 		jest.clearAllMocks();
 	});
 
-	test("renders correctly with default props", () => {
+	it("renders correctly with default props", () => {
 		render(<OverwriteMessages {...defaultProps} />);
 
 		expect(screen.getByText("Write a Secret Message")).toBeInTheDocument();
@@ -33,14 +33,12 @@ describe.only("OverwriteMessages", () => {
 			screen.getByPlaceholderText("Write your secret message...")
 		).toBeInTheDocument();
 		expect(screen.getByText("Save Message")).toBeInTheDocument();
-		expect(
-			screen.getByText("My Messages")
-		).toBeInTheDocument();
+		expect(screen.getByText("My Messages")).toBeInTheDocument();
 		expect(screen.getByText("First secret message")).toBeInTheDocument();
 		expect(screen.getByText("Second secret message")).toBeInTheDocument();
 	});
 
-	test("calls setNewMessage when textarea changes", () => {
+	it("calls setNewMessage when textarea changes", () => {
 		render(<OverwriteMessages {...defaultProps} />);
 		const textarea = screen.getByPlaceholderText(
 			"Write your secret message..."
@@ -50,7 +48,7 @@ describe.only("OverwriteMessages", () => {
 		expect(defaultProps.setNewMessage).toHaveBeenCalledWith("New text");
 	});
 
-	test("calls handleSaveMessage when Save button is clicked", () => {
+	it("calls handleSaveMessage when Save button is clicked", () => {
 		render(
 			<OverwriteMessages {...defaultProps} newMessage="Some message" />
 		);
@@ -60,13 +58,13 @@ describe.only("OverwriteMessages", () => {
 		expect(defaultProps.handleSaveMessage).toHaveBeenCalled();
 	});
 
-	test("disables Save button when newMessage is empty", () => {
+	it("disables Save button when newMessage is empty", () => {
 		render(<OverwriteMessages {...defaultProps} newMessage="" />);
 		const saveButton = screen.getByText("Save Message");
 		expect(saveButton).toBeDisabled();
 	});
 
-	test("renders Update Message and Cancel buttons when editing", () => {
+	it("renders Update Message and Cancel buttons when editing", () => {
 		render(
 			<OverwriteMessages
 				{...defaultProps}
@@ -78,7 +76,7 @@ describe.only("OverwriteMessages", () => {
 		expect(screen.getByText("Cancel")).toBeInTheDocument();
 	});
 
-	test("calls setEditingMessageId and setNewMessage on cancel", () => {
+	it("calls setEditingMessageId and setNewMessage on cancel", () => {
 		render(
 			<OverwriteMessages
 				{...defaultProps}
@@ -93,7 +91,7 @@ describe.only("OverwriteMessages", () => {
 		expect(defaultProps.setNewMessage).toHaveBeenCalledWith("");
 	});
 
-	test("calls handleEditMessage and handleDeleteMessage when buttons clicked", () => {
+	it("calls handleEditMessage and handleDeleteMessage when buttons clicked", () => {
 		render(<OverwriteMessages {...defaultProps} />);
 
 		const editButtons = screen.getAllByText("Edit");
@@ -109,7 +107,7 @@ describe.only("OverwriteMessages", () => {
 		expect(defaultProps.handleDeleteMessage).toHaveBeenCalledWith("2");
 	});
 
-	test("shows overlay with Go Back button when disabled is true", () => {
+	it("shows overlay with Go Back button when disabled is true", () => {
 		render(<OverwriteMessages {...defaultProps} disabled={true} />);
 		const goBackButton = screen.getByText("Go Back");
 
@@ -119,7 +117,7 @@ describe.only("OverwriteMessages", () => {
 		expect(defaultProps.onGoBack).toHaveBeenCalled();
 	});
 
-	test("renders empty state when messages is empty", () => {
+	it("renders empty state when messages is empty", () => {
 		render(<OverwriteMessages {...defaultProps} messages={[]} />);
 		expect(screen.getByText("No messages to edit.")).toBeInTheDocument();
 	});
