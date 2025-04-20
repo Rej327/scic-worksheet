@@ -6,6 +6,7 @@ import React, { useState } from "react";
 import toast from "react-hot-toast";
 import { bg_auth, scic_logo } from "../../../public/assets";
 import Image from "next/image";
+import { FaEye, FaEyeSlash } from "react-icons/fa";
 
 interface DashboardProps {
 	supabase: SupabaseClient;
@@ -22,6 +23,7 @@ export default function Auth({ supabase }: DashboardProps) {
 		fullname?: string;
 	}>({});
 	const [loading, setLoading] = useState(false);
+	const [showPassword, setShowPassword] = useState(false);
 
 	const validate = () => {
 		const newErrors: typeof errors = {};
@@ -118,7 +120,7 @@ export default function Auth({ supabase }: DashboardProps) {
 
 					<form onSubmit={handleAuth} className="space-y-4">
 						{isRegistering && (
-							<div>
+							<div className="relative">
 								<input
 									data-testid="fullname"
 									className="border border-gray-300 p-2 w-full rounded focus:outline-green-600"
@@ -137,7 +139,7 @@ export default function Auth({ supabase }: DashboardProps) {
 							</div>
 						)}
 
-						<div>
+						<div className="relative">
 							<p className="text-right text-xs text-red-800">
 								Note: Email verification is disabled for
 								testing.
@@ -161,17 +163,31 @@ export default function Auth({ supabase }: DashboardProps) {
 							)}
 						</div>
 
-						<div>
+						<div className="relative">
 							<input
 								data-testid="password"
-								className={`border border-gray-300 p-2 w-full rounded focus:outline-green-600 ${
+								className={`border border-gray-300 p-2 pr-10 w-full rounded focus:outline-green-600 ${
 									errors.password && "border-red-500"
 								}`}
-								type="password"
+								type={showPassword ? "text" : "password"}
 								placeholder="Password"
 								value={password}
 								onChange={(e) => setPassword(e.target.value)}
 							/>
+							<button
+								type="button"
+								onClick={() => setShowPassword((prev) => !prev)}
+								className={`absolute right-3 transform -translate-y-1/2 text-gray-600 cursor-pointer ${
+									errors.password ? " top-1/3" : " top-1/2 "
+								}`}
+								tabIndex={-1}
+							>
+								{showPassword ? (
+									<FaEyeSlash size={20} />
+								) : (
+									<FaEye size={20} />
+								)}
+							</button>
 							{errors.password && (
 								<p className="text-red-500 text-sm mt-1">
 									{errors.password}
