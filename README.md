@@ -1,3 +1,7 @@
+<p align="center">
+  <img src="https://staclara.com.ph/wp-content/uploads/2021/08/SCIC-trans-logo-new-FULL.png" alt="Sta. Clara Logo" width="300"/>
+</p>
+
 <h1 align="center" style="font-size: 2.5rem;">
   STA. CLARA INTERNATIONAL CORPORATION
 </h1>
