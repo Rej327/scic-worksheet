@@ -69,16 +69,4 @@ Use the following credentials to explore the features:
 
 ---
 
-## 📝 Submission Contents
-
-- 📄 This `README.md`
-- ✅ A working implementation deployed via Vercel
-
-## 📌 Notes
-
-- A **navigation bar** is included for improved UX (optional enhancement)
-- Code structure is modular for better reusability across components and pages
-
----
-
 <p align="center"><b>Thank you for the opportunity to demonstrate my skills through this activity!</b></p>
