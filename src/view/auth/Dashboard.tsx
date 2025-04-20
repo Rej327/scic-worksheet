@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import React, { useEffect, useState } from "react";
+import React from "react";
 import { FaEdit, FaEnvelope, FaUsers } from "react-icons/fa";
 
 export default function Dashboard() {

@@ -1,48 +1,20 @@
-import { render, screen, waitFor } from "@testing-library/react";
-import { SupabaseClient } from "@supabase/supabase-js";
+import { render, screen } from "@testing-library/react";
+import "@testing-library/jest-dom";
 import Dashboard from "./Dashboard";
 
-// Mocked Supabase client
-const mockSupabase = {
-	auth: {
-		getUser: jest.fn(),
-	},
-} as unknown as SupabaseClient;
+// Mock next/link to avoid issues with <Link>
+jest.mock("next/link", () => {
+	return ({ children }: { children: React.ReactNode }) => children;
+});
 
 describe.only("Dashboard", () => {
-	beforeEach(() => {
-		jest.clearAllMocks();
-	});
+	it("renders all secret pages with correct titles", () => {
+		render(<Dashboard />);
 
-	it("renders secret pages when user is present", async () => {
-		mockSupabase.auth.getUser = jest.fn().mockResolvedValue({
-			data: { user: { id: "123", email: "test@example.com" } },
-			error: null,
-		});
+		const titles = ["Messages", "Overwrite Messages", "Socials"];
 
-		render(<Dashboard supabase={mockSupabase} />);
-
-		await waitFor(() => {
-			expect(screen.getByText("Messages")).toBeInTheDocument();
-			expect(screen.getByText("Overwrite Messages")).toBeInTheDocument();
-			expect(screen.getByText("Socials")).toBeInTheDocument();
-		});
-	});
-
-	it("handles Supabase error", async () => {
-		console.error = jest.fn(); // silence error in test output
-		mockSupabase.auth.getUser = jest.fn().mockResolvedValue({
-			data: null,
-			error: { message: "Supabase error" },
-		});
-
-		render(<Dashboard supabase={mockSupabase} />);
-
-		await waitFor(() => {
-			expect(console.error).toHaveBeenCalledWith(
-				"Error fetching user:",
-				"Supabase error"
-			);
+		titles.forEach((title) => {
+			expect(screen.getByText(title)).toBeInTheDocument();
 		});
 	});
 });
