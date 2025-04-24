@@ -112,6 +112,7 @@ export default function Navigation({
 		}
 
 		const id = userData?.user?.id;
+		const email = userData?.user?.email;
 
 		if (!id) {
 			console.error("User ID is missing");
@@ -119,16 +120,66 @@ export default function Navigation({
 		}
 
 		try {
+			// Step 1: Delete from all related tables
+			const tablesWithUserId = [
+				"secret_messages",
+				"notes",
+				"todos",
+				"reviews",
+				"photos",
+			];
+
+			for (const table of tablesWithUserId) {
+				const { error } = await supabase
+					.from(table)
+					.delete()
+					.eq("user_id", id);
+				if (error) {
+					console.error(
+						`Failed to delete from ${table}:`,
+						error.message
+					);
+				}
+			}
+
+			// Delete from friend_status where user is sender or receiver
+			const { error: friendStatusError } = await supabase
+				.from("friend_status")
+				.delete()
+				.or(`sender_id${id},receiver_id${id}`);
+
+			if (friendStatusError) {
+				console.error(
+					"Failed to delete from friend_status:",
+					friendStatusError.message
+				);
+			}
+
+			// Delete from profiles (assuming 'id' is the user's id)
+			const { error: profileError } = await supabase
+				.from("profiles")
+				.delete()
+				.eq("id", id);
+			if (profileError) {
+				console.error(
+					"Failed to delete from profiles:",
+					profileError.message
+				);
+			}
+
+			await supabase.auth.signOut();
 			const { error } = await supabase.auth.admin.deleteUser(id);
+			setLoading(false);
 			if (error) {
 				toast.error("Error deleting user");
 				return;
 			}
-
-			await supabase.auth.signOut();
-			setLoading(false);
 		} catch (error) {
 			toast.error("Unexpected error during user deletion:");
+		} finally {
+			if (email) {
+				toast.success(`Successfully delete account: ${email}`);
+			}
 		}
 	};
 

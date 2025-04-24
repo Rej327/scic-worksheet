@@ -206,7 +206,7 @@ export default function Auth({ supabase }: DashboardProps) {
 							data-testid="submit-button"
 							type="submit"
 							disabled={loading}
-							className={`flex items-center justify-center gap-2 bg-green-600 hover:bg-green-700 text-white p-2 w-full rounded font-medium transition duration-300 cursor-pointer ${
+							className={`flex flex-row-reverse items-center justify-center gap-2 bg-green-600 hover:bg-green-700 text-white p-2 w-full rounded font-medium transition duration-300 cursor-pointer ${
 								loading ? "opacity-60 cursor-not-allowed" : ""
 							}`}
 						>
